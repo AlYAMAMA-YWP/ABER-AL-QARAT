@@ -434,7 +434,7 @@ const mapFeatureText = document.getElementById("mapFeatureText");
 const mapThumbs = document.getElementById("mapThumbs");
 const mapInsights = document.getElementById("mapInsights");
 const siteGrid = document.getElementById("siteGrid");
-const stageGrid = document.getElementById("stageGrid");
+const stageGrid = document.getElementById("stageGrid") || document.getElementById("photoGrid");
 const safetyPointsContainer = document.getElementById("safetyPoints");
 const safetyGallery = document.getElementById("safetyGallery");
 const safetyDetailGrid = document.getElementById("safetyDetailGrid");
@@ -459,6 +459,10 @@ function setZoomTarget(element, item, fallbackKicker) {
 }
 
 function renderHeroBadges() {
+  if (!heroBadgesContainer) {
+    return;
+  }
+
   heroBadgesContainer.innerHTML = heroBadges
     .map(
       (item) => `
@@ -475,6 +479,10 @@ function renderHeroBadges() {
 }
 
 function renderChapterGrid() {
+  if (!chapterGrid) {
+    return;
+  }
+
   chapterGrid.innerHTML = chapterItems
     .map(
       (item) => `
@@ -488,6 +496,10 @@ function renderChapterGrid() {
 }
 
 function renderDetailCards(container, items) {
+  if (!container) {
+    return;
+  }
+
   container.innerHTML = items
     .map(
       (item) => `
@@ -507,6 +519,10 @@ function renderDetailCards(container, items) {
 }
 
 function renderHeroMedia() {
+  if (!heroFeatureImage || !heroFeatureCaption || !heroThumbs || !heroFeatureTrigger) {
+    return;
+  }
+
   const current = heroMediaItems[state.heroMedia];
   heroFeatureImage.src = current.src;
   heroFeatureImage.alt = current.title;
@@ -529,6 +545,10 @@ function renderHeroMedia() {
 }
 
 function renderMetrics(container, items, className = "metric-card") {
+  if (!container) {
+    return;
+  }
+
   container.innerHTML = items
     .map(
       (metric) => `
@@ -547,6 +567,10 @@ function renderMetrics(container, items, className = "metric-card") {
 }
 
 function renderPhases() {
+  if (!phaseGrid) {
+    return;
+  }
+
   phaseGrid.innerHTML = phases
     .map(
       (phase, index) => `
@@ -561,6 +585,10 @@ function renderPhases() {
 }
 
 function renderMapSection() {
+  if (!mapFeatureImage || !mapFeatureKicker || !mapFeatureTitle || !mapFeatureText || !mapThumbs || !mapInsights || !mapFeatureTrigger) {
+    return;
+  }
+
   const current = mapMediaItems[state.mapMedia];
 
   mapFeatureImage.src = current.src;
@@ -622,6 +650,10 @@ function createMediaFigure(item, className, kicker = "") {
 }
 
 function renderStageGrid() {
+  if (!stageGrid) {
+    return;
+  }
+
   stageGrid.innerHTML = stageItems
     .map(
       (item) => `
@@ -647,6 +679,10 @@ function renderStageGrid() {
 }
 
 function renderSafetySection() {
+  if (!safetyPointsContainer || !safetyGallery) {
+    return;
+  }
+
   safetyPointsContainer.innerHTML = safetyPoints
     .map(
       (item) => `
@@ -663,6 +699,10 @@ function renderSafetySection() {
 }
 
 function renderWall(container, items, kicker) {
+  if (!container) {
+    return;
+  }
+
   container.innerHTML = items
     .map(
       (item) => `
@@ -683,6 +723,10 @@ function renderWall(container, items, kicker) {
 }
 
 function renderDocGrid() {
+  if (!docGrid) {
+    return;
+  }
+
   docGrid.innerHTML = docItems.map((item) => createMediaFigure(item, "doc-card", "الوثائق والشهادات")).join("");
 }
 
@@ -699,6 +743,10 @@ function openModal(source, title, caption, kicker) {
 }
 
 function closeModal() {
+  if (!mediaModal) {
+    return;
+  }
+
   mediaModal.classList.remove("is-open");
   mediaModal.setAttribute("aria-hidden", "true");
   document.body.style.overflow = "";
@@ -726,6 +774,13 @@ function animateCounter(counter) {
 
 function initCounters() {
   const counters = Array.from(document.querySelectorAll("[data-counter]"));
+  if (!counters.length || typeof IntersectionObserver === "undefined") {
+    counters.forEach((counter) => {
+      counter.textContent = numberFormatter.format(Number(counter.dataset.counter || 0));
+    });
+    return;
+  }
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -743,6 +798,16 @@ function initCounters() {
 
 function initReveals() {
   const items = Array.from(document.querySelectorAll(".reveal"));
+  if (!items.length) {
+    return;
+  }
+
+  if (typeof IntersectionObserver === "undefined") {
+    items.forEach((item) => item.classList.add("is-visible"));
+    return;
+  }
+
+  document.documentElement.classList.add("js-enabled");
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -773,25 +838,29 @@ function initScrollButtons() {
 }
 
 function attachEvents() {
-  heroThumbs.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-hero-index]");
-    if (!button) {
-      return;
-    }
+  if (heroThumbs) {
+    heroThumbs.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-hero-index]");
+      if (!button) {
+        return;
+      }
 
-    state.heroMedia = Number(button.dataset.heroIndex);
-    renderHeroMedia();
-  });
+      state.heroMedia = Number(button.dataset.heroIndex);
+      renderHeroMedia();
+    });
+  }
 
-  mapThumbs.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-map-index]");
-    if (!button) {
-      return;
-    }
+  if (mapThumbs) {
+    mapThumbs.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-map-index]");
+      if (!button) {
+        return;
+      }
 
-    state.mapMedia = Number(button.dataset.mapIndex);
-    renderMapSection();
-  });
+      state.mapMedia = Number(button.dataset.mapIndex);
+      renderMapSection();
+    });
+  }
 
   document.addEventListener("click", (event) => {
     const trigger = event.target.closest("[data-modal-src]");

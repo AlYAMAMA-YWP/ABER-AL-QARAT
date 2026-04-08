@@ -1025,6 +1025,11 @@ textarea {
 }
 
 .reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.js-enabled .reveal {
   opacity: 0;
   transform: translateY(24px);
   transition:
@@ -1032,7 +1037,7 @@ textarea {
     transform 650ms ease;
 }
 
-.reveal.is-visible {
+.js-enabled .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
