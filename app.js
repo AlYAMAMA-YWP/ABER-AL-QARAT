@@ -4,6 +4,8 @@ const pad = (value) => String(value).padStart(3, "0");
 const png = (value) => `assets/media/carved_${pad(value)}.png`;
 const range = (start, end) => Array.from({ length: end - start + 1 }, (_, index) => start + index);
 const numberFormatter = new Intl.NumberFormat("ar-SA");
+const lazyImageAttrs = 'loading="lazy" decoding="async"';
+const MODAL_MAX_SCALE = 5;
 
 const entityLogos = {
   owner: png(2),
@@ -12,22 +14,22 @@ const entityLogos = {
 };
 
 const heroBadges = [
-  { title: "الجهة المالكة", text: "أمانة جدة.", logo: entityLogos.owner, logoAlt: "شعار أمانة جدة" },
-  { title: "استشاري الإشراف", text: "مكتب WSP.", logo: entityLogos.consultant, logoAlt: "شعار مكتب WSP" },
-  { title: "المقاول المنفذ", text: "شركة اليمامة للمقاولات.", logo: entityLogos.contractor, logoAlt: "شعار شركة اليمامة للمقاولات" },
+  { title: "الجهة المالكة", text: "أمانة جدة", logo: entityLogos.owner, logoAlt: "شعار أمانة جدة" },
+  { title: "استشاري الإشراف", text: "WSP", logo: entityLogos.consultant, logoAlt: "شعار WSP" },
+  { title: "المقاول المنفذ", text: "شركة اليمامة للمقاولات", logo: entityLogos.contractor, logoAlt: "شعار شركة اليمامة للمقاولات" },
   { title: "رقم المشروع", text: "4/001/0602/03/00/4" },
   { title: "مدة التنفيذ", text: "24 شهر هجري عمل متواصل مع تمديد مدة 135 يوم لاستكمال الأعمال الإضافية." }
 ];
 
 const chapterItems = [
-  { number: "1", title: "الهدف من التقرير والرؤية والرسالة." },
-  { number: "2", title: "نظرة عامة حول المشروع." },
-  { number: "3", title: "جودة المشروع." },
-  { number: "4", title: "الأمن والسلامة المهنية بالمشروع." },
-  { number: "5", title: "الأجهزة والمعدات والأدوات." },
-  { number: "6", title: "مكونات المشروع." },
-  { number: "7", title: "صور قبل وبعد تنفيذ المشروع." },
-  { number: "8", title: "المخاطر والتحديات بالمشروع." }
+  { number: "1", title: "الهدف من التقرير والرؤية والرسالة", target: "#strategy" },
+  { number: "2", title: "نظرة عامة حول المشروع", target: "#overview" },
+  { number: "3", title: "جودة المشروع", target: "#quality" },
+  { number: "4", title: "الأمن والسلامة المهنية بالمشروع", target: "#safety" },
+  { number: "5", title: "الأجهزة والمعدات والأدوات", target: "#equipment" },
+  { number: "6", title: "مكونات المشروع", target: "#components" },
+  { number: "7", title: "صور قبل وبعد تنفيذ المشروع", target: "#field" },
+  { number: "8", title: "المخاطر والتحديات بالمشروع" }
 ];
 
 const strategyItems = [
@@ -86,7 +88,7 @@ const overviewItems = [
       "يعتبر مشروع تنفيذ حلول لتصريف مياه الأمطار لطريق الملك فيصل (عابر القارات سابقا) – أبحر الشمالية من احدى مشاريع برنامج تصريف مياه الأمطار بمحافظة جدة والذي تأتي أهميته من موقعه الجغرافي حيث تم من خلاله حل مشكلة تجمعات المياه في الحي والمنطقة السكنية والتجارية المحيطة به."
   },
   { kicker: "المالك", title: "أمانة جدة", text: "تم طرح المشروع من قبل أمانة جدة (وزارة الشؤون البلدية والقروية).", logo: entityLogos.owner, logoAlt: "شعار أمانة جدة" },
-  { kicker: "استشاري الإشراف", title: "مكتب WSP", text: "استشاري الإشراف على التنفيذ.", logo: entityLogos.consultant, logoAlt: "شعار مكتب WSP" },
+  { kicker: "استشاري الإشراف", title: "WSP", text: "استشاري الإشراف على التنفيذ.", logo: entityLogos.consultant, logoAlt: "شعار WSP" },
   {
     kicker: "المقاول المنفذ",
     title: "شركة اليمامة للمقاولات",
@@ -144,7 +146,13 @@ const componentGalleryItems = ["component-01.jpeg", "component-02.jpeg", "compon
   caption: ""
 }));
 
-const heroMediaItems = [{ src: png(55), title: "الخريطة الرئيسية للمشروع", caption: "الخريطة الرئيسية للمشروع." }];
+const heroMediaItems = [
+  {
+    src: "assets/media/hero-map-main.png",
+    title: "الخريطة الرئيسية للمشروع",
+    caption: "الخريطة الرئيسية للمشروع كما وردت في التقرير."
+  }
+];
 
 const mapMediaItems = [
   {
@@ -169,10 +177,15 @@ const siteItems = [
       "يقع المشروع في شمال محافظة جدة على يسار طريق المدينة، ويقع ضمن حدود بلدية أبحر حيث يخدم المشروع مجموعة من الشوارع والطرق الحيوية في المنطقة."
   },
   {
-    kicker: "مفتاح الخريطة",
-    title: "خطوط شبكة التصريف وواقع غرف التفتيش",
-    text: "يبين مفتاح الخريطة خطوط شبكة التصريف وواقع غرف التفتيش داخل نطاق المشروع."
+    kicker: "النطاق الخدمي",
+    title: "الشوارع والطرق الحيوية",
+    text: "يخدم المشروع مجموعة من الشوارع والطرق الحيوية داخل المنطقة ضمن حدود بلدية أبحر."
   }
+];
+
+const mapLegendItems = [
+  { label: "واقع غرف التفتيش", type: "circle" },
+  { label: "خطوط شبكة التصريف", type: "line" }
 ];
 
 const streetItems = [
@@ -190,7 +203,9 @@ const phases = [
   { title: "أعمال الاختبارات وتسليم الموقع", text: "تم في هذه المرحلة عمل الاختبارات والفحوصات اللازمة لشبكة تصريف الأمطار المنفذة للتأكد من فعاليتها وذلك لتسليم الموقع وانهاء العمل وإجراء تصوير تلفزيوني CCTV لجميع المواسير للتأكد من سلامتها وجاهزيتها." }
 ];
 
-const stageItems = range(20, 43).map((value) => ({ src: png(value), title: "صور مراحل العمل بالمشروع", caption: "" }));
+const stageItems = range(20, 43)
+  .filter((value) => ![24, 25, 26, 27].includes(value))
+  .map((value) => ({ src: png(value), title: "صور مراحل العمل بالمشروع", caption: "" }));
 
 const resourceItems = [
   { value: 192, unit: "فرد", label: "العنصر البشري", detail: "مهندس وعامل وفني ضمن فرق عمل صباحية ومسائية وفرق طوارئ مقسمة على مدار الساعة." },
@@ -320,11 +335,11 @@ const safetyLead = {
 };
 
 const safetyCriteriaItems = [
-  { title: "الإسعافات الأولية" },
-  { title: "الحواجز الخراسانية" },
-  { title: "اللوحات الإرشادية" },
-  { title: "الأدوات الشخصية" },
-  { title: "الزي الشخصي" }
+  { title: "الإسعافات الأولية", icon: "assets/media/safety-first-aid.png" },
+  { title: "الحواجز الخراسانية", icon: "assets/media/safety-barrier.png" },
+  { title: "اللوحات الإرشادية", icon: "assets/media/safety-sign.png" },
+  { title: "الأدوات الشخصية", icon: "assets/media/safety-tools.png" },
+  { title: "الزي الشخصي", icon: "assets/media/safety-uniform.png" }
 ];
 
 const safetyPoints = [
@@ -372,6 +387,7 @@ const mapFeatureKicker = document.getElementById("mapFeatureKicker");
 const mapFeatureTitle = document.getElementById("mapFeatureTitle");
 const mapFeatureText = document.getElementById("mapFeatureText");
 const mapThumbs = document.getElementById("mapThumbs");
+const mapLegend = document.getElementById("mapLegend");
 const mapInsights = document.getElementById("mapInsights");
 const siteGrid = document.getElementById("siteGrid");
 const streetGrid = document.getElementById("streetGrid");
@@ -406,6 +422,8 @@ const modalImage = document.getElementById("modalImage");
 const modalOverline = document.getElementById("modalOverline");
 const modalTitle = document.getElementById("modalTitle");
 const modalCaption = document.getElementById("modalCaption");
+const modalZoomValue = document.getElementById("modalZoomValue");
+const navScrollButtons = Array.from(document.querySelectorAll(".topnav .nav-link[data-scroll]"));
 
 const zoomState = {
   scale: 1,
@@ -417,8 +435,15 @@ const zoomState = {
   originY: 0,
   pinchDistance: 0,
   pinchScale: 1,
+  pinchStartX: 0,
+  pinchStartY: 0,
+  pinchCenterX: 0,
+  pinchCenterY: 0,
   pointers: new Map(),
-  isDragging: false
+  isDragging: false,
+  isInteracting: false,
+  frame: 0,
+  wheelTimeout: 0
 };
 
 function setZoomTarget(element, item, fallbackKicker) {
@@ -442,7 +467,7 @@ function renderHeroBadges() {
       (item) => `
         <article class="hero-badge">
           <div class="hero-badge-head">
-            ${item.logo ? `<span class="entity-badge-mark"><img src="${item.logo}" alt="${item.logoAlt || item.title}" loading="lazy"></span>` : ""}
+            ${item.logo ? `<span class="entity-badge-mark"><img src="${item.logo}" alt="${item.logoAlt || item.title}" ${lazyImageAttrs}></span>` : ""}
             <strong>${item.title}</strong>
           </div>
           <span>${item.text}</span>
@@ -461,8 +486,14 @@ function renderChapterGrid() {
     .map(
       (item) => `
         <article class="chapter-card reveal">
-          <strong>${item.number}</strong>
-          <h3>${item.title}</h3>
+          ${
+            item.target
+              ? `<button class="chapter-card-button" type="button" data-scroll="${item.target}" aria-label="الانتقال إلى ${item.title}">`
+              : `<div class="chapter-card-button chapter-card-button--static" aria-label="${item.title}">`
+          }
+            <strong>${item.number}</strong>
+            <h3>${item.title}</h3>
+          ${item.target ? "</button>" : "</div>"}
         </article>
       `
     )
@@ -479,7 +510,7 @@ function renderDetailCards(container, items) {
       (item) => `
         <article class="detail-card reveal">
           <div class="detail-card-head ${item.logo ? "detail-card-head--with-logo" : ""}">
-            ${item.logo ? `<span class="entity-card-mark"><img src="${item.logo}" alt="${item.logoAlt || item.title}" loading="lazy"></span>` : ""}
+            ${item.logo ? `<span class="entity-card-mark"><img src="${item.logo}" alt="${item.logoAlt || item.title}" ${lazyImageAttrs}></span>` : ""}
             <div>
               ${item.kicker ? `<p class="section-kicker">${item.kicker}</p>` : ""}
               <h3>${item.title}</h3>
@@ -548,7 +579,7 @@ function renderHeroMedia() {
     .map(
       (item, index) => `
         <button class="thumb-button ${index === state.heroMedia ? "is-active" : ""}" type="button" data-hero-index="${index}">
-          <img src="${item.src}" alt="${item.title}" loading="lazy">
+          <img src="${item.src}" alt="${item.title}" ${lazyImageAttrs}>
         </button>
       `
     )
@@ -577,7 +608,7 @@ function renderMapSection() {
       .map(
         (item, index) => `
           <button class="thumb-button ${index === state.mapMedia ? "is-active" : ""}" type="button" data-map-index="${index}">
-            <img src="${item.src}" alt="${item.title}" loading="lazy">
+            <img src="${item.src}" alt="${item.title}" ${lazyImageAttrs}>
           </button>
         `
       )
@@ -587,11 +618,28 @@ function renderMapSection() {
   mapInsights.innerHTML = `<strong>أبرز القراءات</strong>${current.insights.map((item) => `<p>${item}</p>`).join("")}`;
 }
 
+function renderMapLegend() {
+  if (!mapLegend) {
+    return;
+  }
+
+  mapLegend.innerHTML = mapLegendItems
+    .map(
+      (item) => `
+        <div class="legend-item legend-item--${item.type}">
+          <span class="legend-label">${item.label}</span>
+          <span class="legend-swatch legend-swatch--${item.type}" aria-hidden="true"></span>
+        </div>
+      `
+    )
+    .join("");
+}
+
 function createGalleryCard(item, kicker) {
   return `
     <article class="stage-card reveal">
       <button type="button" data-modal-src="${item.src}" data-modal-title="${item.title}" data-modal-caption="${item.caption || ""}" data-modal-kicker="${kicker}">
-        <img src="${item.src}" alt="${item.title}" loading="lazy">
+        <img src="${item.src}" alt="${item.title}" ${lazyImageAttrs}>
       </button>
     </article>
   `;
@@ -602,7 +650,7 @@ function createMediaFigure(item, className, kicker = "") {
     <article class="${className} reveal">
       <button type="button" data-modal-src="${item.src}" data-modal-title="${item.title}" data-modal-caption="${item.caption || ""}" data-modal-kicker="${kicker || item.kicker || ""}">
         <figure>
-          <img src="${item.src}" alt="${item.title}" loading="lazy">
+          <img src="${item.src}" alt="${item.title}" ${lazyImageAttrs}>
           <figcaption>
             <h3>${item.title}</h3>
             ${item.caption ? `<p>${item.caption}</p>` : ""}
@@ -666,7 +714,9 @@ function renderCriteriaGrid(container, items) {
     .map(
       (item, index) => `
         <article class="criteria-card reveal">
-          <span class="criteria-index">${numberFormatter.format(index + 1)}</span>
+          <span class="criteria-index criteria-index--icon">
+            ${item.icon ? `<img src="${item.icon}" alt="${item.title}" ${lazyImageAttrs}>` : numberFormatter.format(index + 1)}
+          </span>
           <strong>${item.title}</strong>
         </article>
       `
@@ -713,7 +763,7 @@ function renderWall(container, items, kicker) {
       (item) => `
         <article class="logo-card reveal">
           <button type="button" data-modal-src="${item.src}" data-modal-title="${item.title}" data-modal-caption="${item.caption || ""}" data-modal-kicker="${kicker}">
-            <img src="${item.src}" alt="${item.title}" loading="lazy">
+            <img src="${item.src}" alt="${item.title}" ${lazyImageAttrs}>
           </button>
         </article>
       `
@@ -727,6 +777,14 @@ function renderDocGrid() {
   }
 
   docGrid.innerHTML = docItems.map((item) => createMediaFigure(item, "doc-card", "الوثائق والشهادات")).join("");
+}
+
+function updateModalZoomValue() {
+  if (!modalZoomValue) {
+    return;
+  }
+
+  modalZoomValue.textContent = `${Math.round(zoomState.scale * 100)}%`;
 }
 
 function openModal(source, title, caption, kicker) {
@@ -761,6 +819,18 @@ function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
 }
 
+function getModalPoint(clientX, clientY) {
+  if (!modalMedia) {
+    return { x: 0, y: 0 };
+  }
+
+  const rect = modalMedia.getBoundingClientRect();
+  return {
+    x: clientX - rect.left - rect.width / 2,
+    y: clientY - rect.top - rect.height / 2
+  };
+}
+
 function clampZoomPan() {
   if (!modalMedia || !modalImage) {
     return;
@@ -774,18 +844,64 @@ function clampZoomPan() {
   zoomState.y = clamp(zoomState.y, -limitY, limitY);
 }
 
-function applyModalZoom() {
+function scheduleModalZoom() {
   if (!modalImage || !modalMedia) {
     return;
   }
 
-  clampZoomPan();
-  modalImage.style.transform = `translate(${zoomState.x}px, ${zoomState.y}px) scale(${zoomState.scale})`;
-  modalMedia.classList.toggle("is-zoomed", zoomState.scale > 1.01);
-  modalMedia.classList.toggle("is-dragging", zoomState.isDragging);
+  if (zoomState.frame) {
+    return;
+  }
+
+  zoomState.frame = requestAnimationFrame(() => {
+    zoomState.frame = 0;
+    clampZoomPan();
+    modalImage.style.transform = `translate3d(${zoomState.x}px, ${zoomState.y}px, 0) scale(${zoomState.scale})`;
+    modalMedia.classList.toggle("is-zoomed", zoomState.scale > 1.01);
+    modalMedia.classList.toggle("is-dragging", zoomState.isDragging);
+    modalMedia.classList.toggle("is-interacting", zoomState.isInteracting);
+    updateModalZoomValue();
+  });
+}
+
+function stopWheelInteraction() {
+  if (zoomState.wheelTimeout) {
+    window.clearTimeout(zoomState.wheelTimeout);
+    zoomState.wheelTimeout = 0;
+  }
+}
+
+function setModalInteraction(isActive) {
+  zoomState.isInteracting = isActive;
+  scheduleModalZoom();
+}
+
+function zoomAtPoint(nextScale, clientX, clientY, baseScale = zoomState.scale, baseX = zoomState.x, baseY = zoomState.y) {
+  const clampedScale = clamp(nextScale, 1, MODAL_MAX_SCALE);
+  zoomState.scale = clampedScale;
+
+  if (clampedScale <= 1.0001) {
+    zoomState.scale = 1;
+    zoomState.x = 0;
+    zoomState.y = 0;
+    scheduleModalZoom();
+    return;
+  }
+
+  const focal = getModalPoint(clientX, clientY);
+  const ratio = clampedScale / Math.max(baseScale, 1);
+  zoomState.x = focal.x - (focal.x - baseX) * ratio;
+  zoomState.y = focal.y - (focal.y - baseY) * ratio;
+  scheduleModalZoom();
 }
 
 function resetModalZoom() {
+  if (zoomState.frame) {
+    cancelAnimationFrame(zoomState.frame);
+    zoomState.frame = 0;
+  }
+
+  stopWheelInteraction();
   zoomState.scale = 1;
   zoomState.x = 0;
   zoomState.y = 0;
@@ -795,16 +911,23 @@ function resetModalZoom() {
   zoomState.originY = 0;
   zoomState.pinchDistance = 0;
   zoomState.pinchScale = 1;
+  zoomState.pinchStartX = 0;
+  zoomState.pinchStartY = 0;
+  zoomState.pinchCenterX = 0;
+  zoomState.pinchCenterY = 0;
   zoomState.isDragging = false;
+  zoomState.isInteracting = false;
   zoomState.pointers.clear();
 
   if (modalImage) {
-    modalImage.style.transform = "";
+    modalImage.style.transform = "translate3d(0px, 0px, 0) scale(1)";
   }
 
   if (modalMedia) {
-    modalMedia.classList.remove("is-zoomed", "is-dragging");
+    modalMedia.classList.remove("is-zoomed", "is-dragging", "is-interacting");
   }
+
+  updateModalZoomValue();
 }
 
 function getPointerDistance() {
@@ -815,6 +938,73 @@ function getPointerDistance() {
 
   const [first, second] = points;
   return Math.hypot(second.x - first.x, second.y - first.y);
+}
+
+function getPointerMidpoint() {
+  const points = Array.from(zoomState.pointers.values());
+  if (points.length < 2) {
+    return points[0] || { x: 0, y: 0 };
+  }
+
+  const [first, second] = points;
+  return {
+    x: (first.x + second.x) / 2,
+    y: (first.y + second.y) / 2
+  };
+}
+
+function beginPinchGesture() {
+  const midpoint = getPointerMidpoint();
+  zoomState.pinchDistance = getPointerDistance();
+  zoomState.pinchScale = zoomState.scale;
+  zoomState.pinchStartX = zoomState.x;
+  zoomState.pinchStartY = zoomState.y;
+  zoomState.pinchCenterX = midpoint.x;
+  zoomState.pinchCenterY = midpoint.y;
+  zoomState.isDragging = false;
+  setModalInteraction(true);
+}
+
+function getModalViewportCenter() {
+  if (!modalMedia) {
+    return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+  }
+
+  const rect = modalMedia.getBoundingClientRect();
+  return {
+    x: rect.left + rect.width / 2,
+    y: rect.top + rect.height / 2
+  };
+}
+
+function changeModalZoom(mode) {
+  const center = getModalViewportCenter();
+
+  if (mode === "reset") {
+    zoomAtPoint(1, center.x, center.y);
+    return;
+  }
+
+  if (mode === "in") {
+    zoomAtPoint(zoomState.scale * 1.2, center.x, center.y);
+    return;
+  }
+
+  if (mode === "out") {
+    zoomAtPoint(zoomState.scale / 1.2, center.x, center.y);
+  }
+}
+
+function setActiveScrollLink(targetSelector) {
+  navScrollButtons.forEach((button) => {
+    const isActive = button.dataset.scroll === targetSelector;
+    button.classList.toggle("is-active", isActive);
+    if (isActive) {
+      button.setAttribute("aria-current", "true");
+    } else {
+      button.removeAttribute("aria-current");
+    }
+  });
 }
 
 function initModalZoom() {
@@ -832,15 +1022,17 @@ function initModalZoom() {
       }
 
       event.preventDefault();
-      const factor = event.deltaY < 0 ? 1.14 : 0.88;
-      zoomState.scale = clamp(zoomState.scale * factor, 1, 5);
+      setModalInteraction(true);
+      stopWheelInteraction();
+      zoomState.wheelTimeout = window.setTimeout(() => {
+        zoomState.wheelTimeout = 0;
+        if (!zoomState.pointers.size) {
+          setModalInteraction(false);
+        }
+      }, 120);
 
-      if (zoomState.scale === 1) {
-        zoomState.x = 0;
-        zoomState.y = 0;
-      }
-
-      applyModalZoom();
+      const factor = Math.exp(-event.deltaY * 0.0018);
+      zoomAtPoint(zoomState.scale * factor, event.clientX, event.clientY);
     },
     { passive: false }
   );
@@ -850,14 +1042,18 @@ function initModalZoom() {
       return;
     }
 
-    modalMedia.setPointerCapture(event.pointerId);
+    if (event.pointerType === "mouse" && event.button !== 0) {
+      return;
+    }
+
+    try {
+      modalMedia.setPointerCapture(event.pointerId);
+    } catch {}
+
     zoomState.pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
 
     if (zoomState.pointers.size === 2) {
-      zoomState.pinchDistance = getPointerDistance();
-      zoomState.pinchScale = zoomState.scale;
-      zoomState.isDragging = false;
-      applyModalZoom();
+      beginPinchGesture();
       return;
     }
 
@@ -867,7 +1063,7 @@ function initModalZoom() {
       zoomState.dragStartY = event.clientY;
       zoomState.originX = zoomState.x;
       zoomState.originY = zoomState.y;
-      applyModalZoom();
+      setModalInteraction(true);
     }
   });
 
@@ -881,12 +1077,23 @@ function initModalZoom() {
     if (zoomState.pointers.size === 2) {
       const distance = getPointerDistance();
       if (zoomState.pinchDistance) {
-        zoomState.scale = clamp((distance / zoomState.pinchDistance) * zoomState.pinchScale, 1, 5);
-        if (zoomState.scale === 1) {
+        const midpoint = getPointerMidpoint();
+        const startPoint = getModalPoint(zoomState.pinchCenterX, zoomState.pinchCenterY);
+        const currentPoint = getModalPoint(midpoint.x, midpoint.y);
+        const nextScale = clamp((distance / zoomState.pinchDistance) * zoomState.pinchScale, 1, MODAL_MAX_SCALE);
+        const ratio = nextScale / Math.max(zoomState.pinchScale, 1);
+        zoomState.scale = nextScale;
+
+        if (nextScale <= 1.0001) {
+          zoomState.scale = 1;
           zoomState.x = 0;
           zoomState.y = 0;
+        } else {
+          zoomState.x = currentPoint.x - (startPoint.x - zoomState.pinchStartX) * ratio;
+          zoomState.y = currentPoint.y - (startPoint.y - zoomState.pinchStartY) * ratio;
         }
-        applyModalZoom();
+
+        scheduleModalZoom();
       }
       return;
     }
@@ -894,20 +1101,46 @@ function initModalZoom() {
     if (zoomState.isDragging && zoomState.scale > 1) {
       zoomState.x = zoomState.originX + (event.clientX - zoomState.dragStartX);
       zoomState.y = zoomState.originY + (event.clientY - zoomState.dragStartY);
-      applyModalZoom();
+      scheduleModalZoom();
     }
   });
 
   const stopPointer = (event) => {
+    if (!zoomState.pointers.has(event.pointerId)) {
+      return;
+    }
+
+    try {
+      modalMedia.releasePointerCapture(event.pointerId);
+    } catch {}
+
     zoomState.pointers.delete(event.pointerId);
+
     if (zoomState.pointers.size < 2) {
       zoomState.pinchDistance = 0;
       zoomState.pinchScale = zoomState.scale;
+      zoomState.pinchStartX = zoomState.x;
+      zoomState.pinchStartY = zoomState.y;
+    }
+
+    if (zoomState.pointers.size === 1 && zoomState.scale > 1) {
+      const [remainingPointer] = zoomState.pointers.values();
+      zoomState.isDragging = true;
+      zoomState.dragStartX = remainingPointer.x;
+      zoomState.dragStartY = remainingPointer.y;
+      zoomState.originX = zoomState.x;
+      zoomState.originY = zoomState.y;
+      setModalInteraction(true);
+      return;
     }
 
     if (!zoomState.pointers.size) {
       zoomState.isDragging = false;
-      applyModalZoom();
+      if (!zoomState.wheelTimeout) {
+        setModalInteraction(false);
+      } else {
+        scheduleModalZoom();
+      }
     }
   };
 
@@ -915,12 +1148,19 @@ function initModalZoom() {
     modalMedia.addEventListener(eventName, stopPointer);
   });
 
-  modalMedia.addEventListener("dblclick", () => {
-    zoomState.scale = zoomState.scale > 1 ? 1 : 2;
-    zoomState.x = 0;
-    zoomState.y = 0;
-    applyModalZoom();
+  modalMedia.addEventListener("dblclick", (event) => {
+    zoomAtPoint(zoomState.scale > 1 ? 1 : 2, event.clientX, event.clientY);
   });
+
+  window.addEventListener(
+    "resize",
+    () => {
+      if (mediaModal.classList.contains("is-open")) {
+        scheduleModalZoom();
+      }
+    },
+    { passive: true }
+  );
 }
 
 function animateCounter(counter) {
@@ -997,10 +1237,55 @@ function initScrollButtons() {
     button.addEventListener("click", () => {
       const target = document.querySelector(button.dataset.scroll);
       if (target) {
+        setActiveScrollLink(button.dataset.scroll);
         target.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     });
   });
+}
+
+function initScrollSpy() {
+  const sectionMap = navScrollButtons
+    .map((button) => ({
+      button,
+      selector: button.dataset.scroll,
+      section: document.querySelector(button.dataset.scroll)
+    }))
+    .filter((item) => item.section)
+    .sort((first, second) => first.section.offsetTop - second.section.offsetTop);
+
+  if (!sectionMap.length) {
+    return;
+  }
+
+  let frame = 0;
+
+  const updateActiveSection = () => {
+    frame = 0;
+    const offset = window.scrollY + Math.max(window.innerHeight * 0.28, 220);
+    let activeSelector = sectionMap[0].selector;
+
+    sectionMap.forEach((item) => {
+      if (item.section.offsetTop <= offset) {
+        activeSelector = item.selector;
+      }
+    });
+
+    setActiveScrollLink(activeSelector);
+  };
+
+  const queueUpdate = () => {
+    if (frame) {
+      return;
+    }
+
+    frame = requestAnimationFrame(updateActiveSection);
+  };
+
+  window.addEventListener("scroll", queueUpdate, { passive: true });
+  window.addEventListener("resize", queueUpdate, { passive: true });
+  window.addEventListener("load", queueUpdate, { passive: true });
+  updateActiveSection();
 }
 
 function attachEvents() {
@@ -1041,9 +1326,41 @@ function attachEvents() {
     button.addEventListener("click", closeModal);
   });
 
+  Array.from(document.querySelectorAll("[data-modal-zoom]")).forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!mediaModal.classList.contains("is-open")) {
+        return;
+      }
+
+      changeModalZoom(button.dataset.modalZoom);
+    });
+  });
+
   document.addEventListener("keydown", (event) => {
+    if (!mediaModal.classList.contains("is-open")) {
+      return;
+    }
+
     if (event.key === "Escape") {
       closeModal();
+      return;
+    }
+
+    if (event.key === "+" || event.key === "=" || event.key === "NumpadAdd") {
+      event.preventDefault();
+      changeModalZoom("in");
+      return;
+    }
+
+    if (event.key === "-" || event.key === "_" || event.key === "NumpadSubtract") {
+      event.preventDefault();
+      changeModalZoom("out");
+      return;
+    }
+
+    if (event.key === "0") {
+      event.preventDefault();
+      changeModalZoom("reset");
     }
   });
 }
@@ -1062,6 +1379,7 @@ function render() {
   renderSimpleGallery(componentGallery, componentGalleryItems, "مكونات المشروع");
   renderHeroMedia();
   renderMapSection();
+  renderMapLegend();
   renderDetailCards(siteGrid, siteItems);
   renderDetailCards(streetGrid, streetItems);
   renderPhases();
@@ -1094,6 +1412,7 @@ function render() {
 render();
 attachEvents();
 initScrollButtons();
+initScrollSpy();
 initCounters();
 initReveals();
 initModalZoom();
