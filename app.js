@@ -890,7 +890,17 @@ function renderSectionForSelector(selector) {
     return;
   }
 
-  renderDeferredSection(selector.slice(1));
+  const sectionId = selector.slice(1);
+  const deferredIndex = deferredSectionIds.indexOf(sectionId);
+
+  if (deferredIndex === -1) {
+    renderDeferredSection(sectionId);
+    return;
+  }
+
+  deferredSectionIds.slice(0, deferredIndex + 1).forEach((deferredSectionId) => {
+    renderDeferredSection(deferredSectionId);
+  });
 }
 
 function setupDeferredSections() {
@@ -1451,11 +1461,16 @@ function initScrollButtons() {
   Array.from(document.querySelectorAll("[data-scroll]")).forEach((button) => {
     button.addEventListener("click", () => {
       renderSectionForSelector(button.dataset.scroll);
-      const target = document.querySelector(button.dataset.scroll);
-      if (target) {
-        setActiveScrollLink(button.dataset.scroll);
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          const target = document.querySelector(button.dataset.scroll);
+          if (target) {
+            setActiveScrollLink(button.dataset.scroll);
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
     });
   });
 }

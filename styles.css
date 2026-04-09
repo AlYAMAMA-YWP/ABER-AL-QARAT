@@ -1231,8 +1231,10 @@ textarea {
 .stage-card img {
   width: 100%;
   aspect-ratio: 4 / 3;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   display: block;
+  background: #f4f7fb;
 }
 
 .field-highlight {
