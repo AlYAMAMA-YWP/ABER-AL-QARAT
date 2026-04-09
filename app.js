@@ -395,8 +395,19 @@ const safetyDetailItems = [
   { kicker: "اللقاءات الدورية", title: "الالتزام بالاشتراطات المطلوبة", text: "تم عقد لقاءات واجتماعات دورية بالعمال ومهندسي المواقع لتوضيح خطة الأمن والسلامة والوقوف على مدى الالتزام بالمعايير والاشتراطات المطلوبة لتفادي المخاطر والحفاظ على الأرواح والممتلكات." }
 ];
 
-const safetyGalleryItems = [62, 66, 67, 83, 84, 88].map((value) => ({
-  src: png(value),
+const safetyGalleryItems = [
+  "safety-original-image112.jpeg",
+  "safety-original-image113.jpg",
+  "safety-original-image114.jpeg",
+  "safety-original-image115.jpeg",
+  "safety-original-image116.jpg",
+  "safety-original-image117.jpg",
+  "safety-original-image118.jpeg",
+  "safety-original-image119.jpeg",
+  "safety-original-image120.jpeg",
+  "safety-original-image121.jpeg"
+].map((fileName) => ({
+  src: `assets/media/${fileName}`,
   title: "أعمال الأمن والسلامة المهنية بالمشروع",
   caption: ""
 }));
@@ -878,9 +889,7 @@ function renderQualitySection() {
 function renderSafetySection() {
   renderStatementCard(safetyLeadCard, safetyLead);
   renderCriteriaGrid(safetyCriteriaGrid, safetyCriteriaItems);
-  renderSafetyPoints();
   renderSimpleGallery(safetyGallery, safetyGalleryItems, "الأمن والسلامة المهنية");
-  renderDetailCards(safetyDetailGrid, safetyDetailItems);
 }
 
 function renderPartnersSection() {
