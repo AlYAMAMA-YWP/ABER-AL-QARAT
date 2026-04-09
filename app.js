@@ -459,12 +459,18 @@ function renderHeroBadges() {
   heroBadgesContainer.innerHTML = heroBadges
     .map(
       (item) => `
-        <article class="hero-badge">
-          <div class="hero-badge-head">
-            ${item.logo ? `<span class="entity-badge-mark"><img src="${item.logo}" alt="${item.logoAlt || item.title}" ${lazyImageAttrs}></span>` : ""}
-            <strong>${item.title}</strong>
-          </div>
-          <span>${item.text}</span>
+        <article class="hero-summary-card ${item.logo ? "hero-summary-card--entity" : "hero-summary-card--meta"} reveal">
+          ${item.logo ? `<p class="hero-summary-kicker">${item.title}</p>` : `<p class="hero-summary-kicker hero-summary-kicker--meta">${item.title}</p>`}
+          ${
+            item.logo
+              ? `
+                <span class="entity-badge-mark hero-summary-logo"><img src="${item.logo}" alt="${item.logoAlt || item.title}" ${lazyImageAttrs}></span>
+                <strong class="hero-summary-name">${item.text}</strong>
+              `
+              : `
+                <strong class="hero-summary-value">${item.text}</strong>
+              `
+          }
         </article>
       `
     )

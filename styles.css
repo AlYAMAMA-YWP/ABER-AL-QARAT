@@ -279,6 +279,7 @@ textarea {
 .chapter-grid,
 .detail-grid,
 .overview-entity-grid,
+.hero-summary-grid,
 .map-layout,
 .field-layout,
 .safety-layout,
@@ -419,9 +420,13 @@ textarea {
   font-size: 1.04rem;
 }
 
-.hero-badges {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.hero-badges,
+.hero-summary-grid {
   margin-top: 22px;
+}
+
+.hero-summary-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .chapter-grid {
@@ -552,6 +557,67 @@ textarea {
   color: var(--muted);
   line-height: 1.8;
   text-align: center;
+}
+
+.hero-summary-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 22px 18px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: linear-gradient(180deg, #ffffff, #f8fbfd);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.hero-summary-card--entity {
+  min-height: 190px;
+}
+
+.hero-summary-card--meta {
+  min-height: 190px;
+}
+
+.hero-summary-kicker {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+.hero-summary-kicker--meta {
+  color: var(--brand);
+}
+
+.hero-summary-logo {
+  width: min(100%, 210px);
+  min-width: 0;
+  height: 76px;
+}
+
+.hero-summary-name,
+.hero-summary-value {
+  display: block;
+  margin: 0;
+  max-width: 100%;
+  color: var(--text);
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.hero-summary-name {
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+
+.hero-summary-value {
+  font-size: 1.04rem;
+  line-height: 1.95;
+  font-weight: 700;
 }
 
 .section-head {
@@ -1660,6 +1726,7 @@ textarea {
   .chapter-grid,
   .detail-grid,
   .overview-entity-grid,
+  .hero-summary-grid,
   .resource-grid,
   .phase-grid,
   .stage-grid,
@@ -1788,6 +1855,7 @@ textarea {
   }
 
   .hero-badges,
+  .hero-summary-grid,
   .chapter-grid,
   .detail-grid,
   .overview-entity-grid,
@@ -1885,16 +1953,6 @@ textarea {
 
   .modal-zoom-controls {
     justify-content: center;
-  }
-
-  .hero-badge-head {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .hero-badge {
-    text-align: center;
   }
 
   .hero h1 {
