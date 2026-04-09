@@ -1866,6 +1866,23 @@ textarea {
 }
 
 @media (max-width: 820px) {
+  .section,
+  .gallery-shell,
+  .subsection-stack,
+  .task-columns,
+  .stage-grid,
+  .equipment-gallery,
+  .component-gallery,
+  .photo-grid,
+  .safety-gallery,
+  .logo-wall,
+  .doc-grid,
+  .process-grid,
+  .criteria-grid {
+    content-visibility: visible !important;
+    contain-intrinsic-size: auto !important;
+  }
+
   .site-shell {
     width: min(calc(100% - 20px), var(--max-width));
   }

@@ -953,6 +953,11 @@ function scrollToSelector(selector, behavior = "smooth") {
 }
 
 function setupDeferredSections() {
+  if (window.innerWidth <= 820) {
+    deferredSectionIds.forEach((sectionId) => renderDeferredSection(sectionId));
+    return;
+  }
+
   if (typeof IntersectionObserver === "undefined") {
     deferredSectionIds.forEach((sectionId) => renderDeferredSection(sectionId));
     return;
@@ -981,6 +986,10 @@ function setupDeferredSections() {
 }
 
 function warmDeferredSections(index = 0) {
+  if (window.innerWidth <= 820) {
+    return;
+  }
+
   if (index >= deferredSectionIds.length) {
     return;
   }
