@@ -1320,17 +1320,35 @@ textarea {
 #quality .quality-gallery .stage-card img {
   aspect-ratio: 16 / 10;
   max-height: 220px;
-  object-fit: cover;
+  object-fit: contain;
+  background: #f5f8fc;
+  box-sizing: border-box;
+  padding: 10px;
 }
 
 #quality .doc-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 240px));
+  justify-content: center;
+  gap: 18px;
+}
+
+#quality .doc-card {
+  align-self: start;
+}
+
+#quality .doc-card figure {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
 }
 
 #quality .doc-card img {
   aspect-ratio: 3 / 4;
-  max-height: 260px;
+  max-height: 320px;
+  object-fit: contain;
+  background: #f7fafc;
+  box-sizing: border-box;
+  padding: 12px;
 }
 
 .stage-card {
