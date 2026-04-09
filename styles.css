@@ -1314,6 +1314,23 @@ textarea {
 
 .quality-gallery {
   margin-top: 10px;
+  gap: 16px;
+}
+
+#quality .quality-gallery .stage-card img {
+  aspect-ratio: 16 / 10;
+  max-height: 220px;
+  object-fit: cover;
+}
+
+#quality .doc-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+#quality .doc-card img {
+  aspect-ratio: 3 / 4;
+  max-height: 260px;
 }
 
 .stage-card {
@@ -2333,6 +2350,10 @@ textarea {
   }
 
   .component-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  #quality .doc-grid {
     grid-template-columns: 1fr;
   }
 
