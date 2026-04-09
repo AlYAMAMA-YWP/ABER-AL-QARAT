@@ -444,11 +444,6 @@ textarea {
   text-align: right;
 }
 
-.media-caption,
-.map-meta,
-.photo-card figcaption,
-.safety-card figcaption,
-.doc-card figcaption,
 .modal-meta {
   display: none !important;
 }
@@ -1439,14 +1434,34 @@ textarea {
 .logo-card button {
   display: grid;
   place-items: center;
-  min-height: 150px;
-  padding: 18px;
+  min-height: 138px;
+  padding: 18px 18px 10px;
 }
 
 .logo-card img {
   max-width: 100%;
   max-height: 90px;
   object-fit: contain;
+}
+
+.logo-card-copy {
+  padding: 0 14px 16px;
+  text-align: center;
+}
+
+.logo-card-copy strong {
+  display: block;
+  color: var(--text);
+  font-size: 0.86rem;
+  line-height: 1.7;
+  font-weight: 700;
+}
+
+.logo-card-copy p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.75;
 }
 
 .doc-grid {

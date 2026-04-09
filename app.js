@@ -251,12 +251,12 @@ const standardsLeadCopy =
   "راعى مشروع تنفيذ حلول لتصريف مياه الأمطار لطريق الملك فيصل (عابر القارات سابقا) – أبحر الشمالية، اتباع المعايير الفنية والهندسية التي تضمن الجودة في التنفيذ والإخراج ومنها أنظمة الجودة العالمية الايزو ISO9001 والعديد من المواصفات الوطنية والدولية والأكواد والأدلة المرجعية المختلفة.";
 
 const standardItems = [
-  { src: png(78), title: "الهيئة العربية السعودية للمواصفات والمقاييس", caption: "مرجعية وطنية للمواصفات والمقاييس." },
-  { src: png(75), title: "المواصفات القياسية البريطانية", caption: "مرجع فني دولي ضمن المواصفات المعتمدة." },
-  { src: png(77), title: "مواصفات وزارة الشؤون البلدية والقروية", caption: "مرجعية تنظيمية وفنية مرتبطة بالمشروع." },
-  { src: png(74), title: "الجمعية الأمريكية لمهندسي الطرق", caption: "مرجع هندسي داعم لجودة التنفيذ." },
-  { src: png(79), title: "مواصفات وزارة النقل السعودية", caption: "مرجعية فنية مرتبطة بأعمال الطرق والبنية التحتية." },
-  { src: png(76), title: "ISO 9001", caption: "نظام جودة عالمي ضمن المرجعيات الفنية والهندسية." }
+  { src: png(78), title: "الهيئة العربية السعودية للمواصفات والمقاييس", caption: "" },
+  { src: png(76), title: "ISO", caption: "" },
+  { src: png(77), title: "مواصفات وزارة الشؤون البلدية والقروية", caption: "" },
+  { src: png(74), title: "الجمعية الأمريكية لمهندسي الطرق", caption: "" },
+  { src: png(79), title: "مواصفات وزارة النقل السعودية", caption: "" },
+  { src: png(75), title: "المواصفات القياسية البريطانية", caption: "" }
 ];
 
 const materialLeadCopy =
@@ -699,7 +699,13 @@ function createMediaFigure(item, className, kicker = "") {
   return `
     <article class="${className} reveal">
       <button type="button" data-modal-src="${item.src}" data-modal-title="${item.title}" data-modal-caption="${item.caption || ""}" data-modal-kicker="${kicker || item.kicker || ""}">
-        <img src="${item.src}" alt="${item.title}" ${lazyImageAttrs}>
+        <figure>
+          <img src="${item.src}" alt="${item.title}" ${lazyImageAttrs}>
+          <figcaption>
+            <h3>${item.title}</h3>
+            ${item.caption ? `<p>${item.caption}</p>` : ""}
+          </figcaption>
+        </figure>
       </button>
     </article>
   `;
@@ -955,6 +961,9 @@ function renderWall(container, items, kicker) {
           <button type="button" data-modal-src="${item.src}" data-modal-title="${item.title}" data-modal-caption="${item.caption || ""}" data-modal-kicker="${kicker}">
             <img src="${item.src}" alt="${item.title}" ${lazyImageAttrs}>
           </button>
+          <div class="logo-card-copy">
+            <strong>${item.title}</strong>
+          </div>
         </article>
       `
     )
