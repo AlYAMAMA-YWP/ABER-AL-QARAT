@@ -119,16 +119,16 @@ const componentMetrics = [
     unit: "م",
     label: "أطوال المواسير",
     detail: "مجموعة كبيرة من المواسير بأقطار مختلفة موزعة على شوارع وطرق المنطقة المخدومة بالمشروع.",
-    icon: "assets/media/component-icon-pipes.png",
-    iconAlt: "أيقونة المواسير"
+      icon: "assets/media/component-icon-catchpit.png",
+      iconAlt: "أيقونة المواسير"
   },
   {
     value: 495,
     unit: "مصيدة",
     label: "مصائد تجميع المياه",
     detail: "تعمل على تجميع مياه الأمطار وتوزيعها داخل خطوط نقل المياه بالشبكة.",
-    icon: "assets/media/component-icon-catchpit.png",
-    iconAlt: "أيقونة مصائد تجميع مياه الأمطار"
+      icon: "assets/media/component-icon-pipes.png",
+      iconAlt: "أيقونة مصائد تجميع مياه الأمطار"
   },
   {
     value: 154,
@@ -617,7 +617,7 @@ function renderMetrics(container, items, className = "metric-card") {
       (metric) => `
         <article class="${className} reveal">
           <div class="metric-card-top${metric.icon ? " metric-card-top--icon" : ""}">
-            ${metric.icon ? `<span class="metric-icon" aria-hidden="true"><img src="${metric.icon}" alt="${metric.iconAlt || metric.label}" ${lazyImageAttrs}></span>` : ""}
+            ${metric.icon ? `<span class="metric-icon" aria-hidden="true"><img src="${metric.icon}" alt="${metric.iconAlt || metric.label}" decoding="async"></span>` : ""}
             <small>${metric.label}</small>
           </div>
           <strong>
