@@ -355,7 +355,7 @@ textarea {
 .hero-copy {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: stretch;
 }
 
 .hero-copy::before,
@@ -402,7 +402,7 @@ textarea {
 
 .hero h1 {
   max-width: none;
-  width: fit-content;
+  width: min(100%, 660px);
   margin: 0 0 0 auto;
   font-size: clamp(2.2rem, 4vw, 4.35rem);
 }
@@ -410,12 +410,14 @@ textarea {
 .hero-title {
   display: grid;
   gap: 0.08em;
-  justify-items: end;
+  justify-items: stretch;
+  width: 100%;
   text-align: right;
 }
 
 .hero-title-line {
   display: block;
+  width: 100%;
   text-align: right;
   white-space: nowrap;
 }
@@ -435,8 +437,9 @@ textarea {
 
 .hero-text {
   margin: 18px 0 0;
-  width: min(100%, 68ch);
+  width: min(100%, 660px);
   max-width: 68ch;
+  margin-inline-start: auto;
   font-size: 1.04rem;
   text-align: right;
 }
@@ -790,7 +793,8 @@ textarea {
   flex-wrap: wrap;
   gap: 12px;
   justify-content: flex-end;
-  width: 100%;
+  width: min(100%, 660px);
+  margin-inline-start: auto;
   margin-top: 26px;
 }
 
@@ -837,7 +841,8 @@ textarea {
 }
 
 .hero-banner {
-  width: 100%;
+  width: min(100%, 660px);
+  margin-inline-start: auto;
   margin-top: 24px;
   overflow: hidden;
   border: 1px solid var(--line);
@@ -1914,11 +1919,19 @@ textarea {
   }
 
   .hero-title-line {
+    width: auto;
     text-align: center;
   }
 
   .hero-copy {
     align-items: stretch;
+  }
+
+  .hero-text,
+  .hero-actions,
+  .hero-banner {
+    width: 100%;
+    margin-inline-start: 0;
   }
 
   .hero-copy,
