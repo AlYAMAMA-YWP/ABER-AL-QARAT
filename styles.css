@@ -32,11 +32,18 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  overflow-x: clip;
+  padding-inline-start: env(safe-area-inset-left, 0px);
+  padding-inline-end: env(safe-area-inset-right, 0px);
+  padding-block-start: env(safe-area-inset-top, 0px);
+  padding-block-end: env(safe-area-inset-bottom, 0px);
   color: var(--text);
   font-family: "Tajawal", "DIN Next LT Arabic", "Segoe UI", Tahoma, sans-serif;
   background:
@@ -73,6 +80,30 @@ textarea {
   width: min(calc(100% - 32px), var(--max-width));
   margin: 0 auto;
   padding-bottom: 56px;
+}
+
+.site-shell,
+.site-shell > *,
+.topbar,
+.topnav,
+.topnav-column,
+.hero-grid > *,
+.detail-grid > *,
+.metric-grid > *,
+.resource-grid > *,
+.phase-grid > *,
+.stage-grid > *,
+.component-gallery > *,
+.equipment-gallery > *,
+.photo-grid > *,
+.safety-gallery > *,
+.logo-wall > *,
+.doc-grid > *,
+.criteria-grid > *,
+.process-grid > *,
+.task-columns > *,
+.footer > * {
+  min-width: 0;
 }
 
 .topbar {
@@ -354,6 +385,7 @@ textarea {
 .insight-panel p {
   color: var(--muted);
   line-height: 1.9;
+  overflow-wrap: anywhere;
 }
 
 .hero-text {
@@ -397,6 +429,11 @@ textarea {
   gap: 14px;
 }
 
+.detail-card-head > div {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .hero-badge-head {
   margin-bottom: 10px;
 }
@@ -406,6 +443,7 @@ textarea {
 }
 
 .detail-card-head--with-logo {
+  justify-content: space-between;
   align-items: flex-start;
 }
 
@@ -467,6 +505,7 @@ textarea {
 .chapter-card,
 .detail-card {
   contain: layout;
+  overflow: hidden;
   padding: 22px;
   border: 1px solid var(--line);
   border-radius: 24px;
@@ -516,6 +555,7 @@ textarea {
   margin: 0;
   line-height: 1.5;
   font-size: 1.05rem;
+  overflow-wrap: anywhere;
 }
 
 .detail-card-head .section-kicker {
@@ -1325,10 +1365,10 @@ textarea {
 .modal-dialog {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.75fr);
-  gap: 24px;
-  width: min(calc(100% - 32px), 1200px);
-  margin: 36px auto;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  width: min(calc(100% - 32px), 1280px);
+  margin: 24px auto;
   padding: 72px 24px 24px;
   border-radius: 28px;
   border: 1px solid rgba(255, 255, 255, 0.85);
@@ -1339,7 +1379,6 @@ textarea {
 }
 
 .modal-tools {
-  grid-column: 1 / -1;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1399,6 +1438,7 @@ textarea {
   display: grid;
   place-items: center;
   overflow: hidden;
+  min-height: min(64vh, 720px);
   border: 1px solid var(--line);
   border-radius: 22px;
   background: var(--surface-soft);
@@ -1409,7 +1449,8 @@ textarea {
 
 .modal-media img {
   width: 100%;
-  max-height: 78vh;
+  height: min(64vh, 720px);
+  max-height: none;
   object-fit: contain;
   cursor: zoom-in;
   user-select: none;
@@ -1430,7 +1471,8 @@ textarea {
 }
 
 .modal-meta {
-  align-self: center;
+  align-self: stretch;
+  padding-inline: 8px;
 }
 
 .modal-meta h3 {
@@ -1553,6 +1595,14 @@ textarea {
   .modal-help {
     text-align: center;
   }
+
+  .modal-media {
+    min-height: min(58vh, 620px);
+  }
+
+  .modal-media img {
+    height: min(58vh, 620px);
+  }
 }
 
 @media (max-width: 820px) {
@@ -1633,6 +1683,25 @@ textarea {
     padding: 20px;
     border-radius: 24px;
   }
+
+  .detail-card-head--with-logo {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .detail-card-head--with-logo > div {
+    text-align: center;
+  }
+
+  .detail-card-head--with-logo .entity-card-mark {
+    order: -1;
+  }
+
+  .detail-card p:last-child {
+    text-align: center;
+  }
 }
 
 @media (max-width: 560px) {
@@ -1669,6 +1738,16 @@ textarea {
     justify-content: center;
   }
 
+  .hero-badge-head {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-badge {
+    text-align: center;
+  }
+
   .hero h1 {
     font-size: 1.95rem;
   }
@@ -1690,6 +1769,88 @@ textarea {
     grid-template-columns: 1fr;
   }
 
+}
+
+@media (max-width: 420px) {
+  .site-shell {
+    width: min(calc(100% - 10px), var(--max-width));
+    padding-bottom: 40px;
+  }
+
+  .topbar {
+    gap: 16px;
+    padding: 16px 10px 18px;
+    border-radius: 24px;
+  }
+
+  .topnav {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .topnav-column {
+    gap: 10px;
+  }
+
+  .nav-link {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.92rem;
+  }
+
+  .section {
+    padding-top: 40px;
+  }
+
+  .section-head {
+    padding-inline-start: 12px;
+  }
+
+  .hero h1 {
+    font-size: 1.72rem;
+    line-height: 1.45;
+  }
+
+  .hero-text,
+  .section-head p,
+  .detail-card p:last-child,
+  .metric-card p,
+  .resource-card p,
+  .process-card p,
+  .task-list li {
+    font-size: 0.96rem;
+    line-height: 1.85;
+  }
+
+  .modal-dialog {
+    width: min(calc(100% - 12px), 1200px);
+    margin: 12px auto;
+    padding: 64px 12px 16px;
+  }
+
+  .modal-media {
+    min-height: min(50vh, 460px);
+  }
+
+  .modal-media img {
+    height: min(50vh, 460px);
+  }
+
+  .modal-close {
+    top: 12px;
+    inset-inline-end: 12px;
+  }
+
+  .modal-tool-button,
+  .modal-zoom-value {
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
+  }
+
+  .modal-tool-button--wide {
+    min-width: 92px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
