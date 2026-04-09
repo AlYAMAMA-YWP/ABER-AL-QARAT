@@ -144,22 +144,26 @@ textarea {
 .topbar-project-title {
   display: grid;
   justify-items: center;
-  gap: 10px;
+  gap: 4px;
   width: 100%;
 }
 
 .topbar-project-line {
-  display: inline-block;
-  max-width: 100%;
-  padding: 8px 16px;
-  border-radius: 8px;
-  color: #ffffff;
-  background: linear-gradient(135deg, #3c6fda, #2d59b5);
-  box-shadow: 0 12px 26px rgba(45, 89, 181, 0.18);
-  font-size: clamp(1.18rem, 2vw, 1.9rem);
-  line-height: 1.7;
+  display: block;
+  max-width: min(100%, 36ch);
+  padding: 0;
+  color: var(--brand);
+  background: none;
+  box-shadow: none;
+  font-size: clamp(1.18rem, 1.9vw, 1.82rem);
+  line-height: 1.8;
   font-weight: 700;
-  white-space: nowrap;
+  text-align: center;
+}
+
+.topbar-project-line:last-child {
+  color: var(--text);
+  font-size: clamp(1.04rem, 1.55vw, 1.48rem);
 }
 
 .brand-mark {
@@ -387,6 +391,8 @@ textarea {
 
 .hero h1 {
   max-width: none;
+  width: fit-content;
+  margin: 0 0 0 auto;
   font-size: clamp(2.2rem, 4vw, 4.35rem);
 }
 
@@ -394,10 +400,12 @@ textarea {
   display: grid;
   gap: 0.08em;
   justify-items: end;
+  text-align: right;
 }
 
 .hero-title-line {
   display: block;
+  text-align: right;
   white-space: nowrap;
 }
 
@@ -418,6 +426,7 @@ textarea {
   margin: 18px 0 0;
   max-width: 68ch;
   font-size: 1.04rem;
+  text-align: right;
 }
 
 .hero-badges,
@@ -1770,11 +1779,12 @@ textarea {
   }
 
   .topbar-project-title {
-    gap: 8px;
+    gap: 3px;
   }
 
   .topbar-project-line {
-    font-size: 1.02rem;
+    max-width: 100%;
+    font-size: 1.04rem;
   }
 
   .topnav {
@@ -1834,12 +1844,11 @@ textarea {
   }
 
   .topbar-project-title {
-    gap: 6px;
+    gap: 2px;
   }
 
   .topbar-project-line {
     max-width: 100%;
-    padding: 7px 12px;
     font-size: 0.95rem;
     line-height: 1.8;
     white-space: normal;
@@ -1878,6 +1887,8 @@ textarea {
   }
 
   .hero h1 {
+    width: 100%;
+    margin-left: 0;
     max-width: 100%;
     font-size: 2.2rem;
   }
@@ -2019,7 +2030,6 @@ textarea {
   }
 
   .topbar-project-line {
-    padding: 7px 10px;
     font-size: 0.88rem;
   }
 
