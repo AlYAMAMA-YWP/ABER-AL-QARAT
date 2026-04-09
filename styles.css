@@ -89,6 +89,7 @@ textarea {
 .topnav-column,
 .hero-grid > *,
 .detail-grid > *,
+.overview-entity-grid > *,
 .metric-grid > *,
 .resource-grid > *,
 .phase-grid > *,
@@ -141,12 +142,24 @@ textarea {
 }
 
 .topbar-project-title {
-  margin: 0;
-  max-width: 38ch;
-  color: var(--muted);
-  font-size: clamp(1.2rem, 2vw, 1.72rem);
-  line-height: 1.85;
-  font-weight: 500;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.topbar-project-line {
+  display: inline-block;
+  max-width: 100%;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #3c6fda, #2d59b5);
+  box-shadow: 0 12px 26px rgba(45, 89, 181, 0.18);
+  font-size: clamp(1.18rem, 2vw, 1.9rem);
+  line-height: 1.7;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .brand-mark {
@@ -265,6 +278,7 @@ textarea {
 .hero-grid,
 .chapter-grid,
 .detail-grid,
+.overview-entity-grid,
 .map-layout,
 .field-layout,
 .safety-layout,
@@ -371,17 +385,19 @@ textarea {
 }
 
 .hero h1 {
-  max-width: 16ch;
+  max-width: none;
   font-size: clamp(2.2rem, 4vw, 4.35rem);
 }
 
 .hero-title {
   display: grid;
   gap: 0.08em;
+  justify-items: end;
 }
 
 .hero-title-line {
   display: block;
+  white-space: nowrap;
 }
 
 .hero-text,
@@ -415,6 +431,12 @@ textarea {
 
 .detail-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 22px;
+}
+
+.overview-entity-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
   margin-top: 22px;
 }
 
@@ -632,6 +654,46 @@ textarea {
   max-width: 100%;
   margin: 0;
   text-align: center;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.overview-lead-card p:last-child {
+  max-width: 88ch;
+}
+
+.entity-overview-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 182px;
+  padding: 22px 18px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: linear-gradient(180deg, #ffffff, #f8fbfd);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.entity-overview-role {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+.entity-overview-card .entity-card-mark--simple {
+  width: min(100%, 200px);
+  height: 74px;
+}
+
+.entity-overview-card h3 {
+  margin: 0;
+  font-size: 1.06rem;
+  line-height: 1.7;
   overflow-wrap: break-word;
   word-break: normal;
 }
@@ -1597,6 +1659,7 @@ textarea {
   .metric-grid,
   .chapter-grid,
   .detail-grid,
+  .overview-entity-grid,
   .resource-grid,
   .phase-grid,
   .stage-grid,
@@ -1640,8 +1703,11 @@ textarea {
   }
 
   .topbar-project-title {
-    max-width: 100%;
-    font-size: 1.12rem;
+    gap: 8px;
+  }
+
+  .topbar-project-line {
+    font-size: 1.02rem;
   }
 
   .topnav {
@@ -1701,8 +1767,15 @@ textarea {
   }
 
   .topbar-project-title {
-    font-size: 1rem;
+    gap: 6px;
+  }
+
+  .topbar-project-line {
+    max-width: 100%;
+    padding: 7px 12px;
+    font-size: 0.95rem;
     line-height: 1.8;
+    white-space: normal;
   }
 
   .topnav {
@@ -1717,6 +1790,7 @@ textarea {
   .hero-badges,
   .chapter-grid,
   .detail-grid,
+  .overview-entity-grid,
   .resource-grid,
   .metric-grid,
   .phase-grid,
@@ -1738,6 +1812,10 @@ textarea {
   .hero h1 {
     max-width: 100%;
     font-size: 2.2rem;
+  }
+
+  .hero-title {
+    justify-items: center;
   }
 
   .hero-copy,
@@ -1820,7 +1898,7 @@ textarea {
   }
 
   .hero h1 {
-    font-size: 1.95rem;
+    font-size: 1.68rem;
   }
 
   .hero-actions .button {
@@ -1878,8 +1956,13 @@ textarea {
   }
 
   .hero h1 {
-    font-size: 1.72rem;
+    font-size: 1.38rem;
     line-height: 1.45;
+  }
+
+  .topbar-project-line {
+    padding: 7px 10px;
+    font-size: 0.88rem;
   }
 
   .hero-text,

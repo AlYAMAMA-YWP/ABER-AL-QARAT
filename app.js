@@ -80,24 +80,17 @@ const strategicItems = [
   }
 ];
 
-const overviewItems = [
-  {
-    kicker: "نظرة عامة حول المشروع",
-    title: "تعريف المشروع",
-    text:
-      "يعتبر مشروع تنفيذ حلول لتصريف مياه الأمطار لطريق الملك فيصل (عابر القارات سابقا) – أبحر الشمالية من احدى مشاريع برنامج تصريف مياه الأمطار بمحافظة جدة والذي تأتي أهميته من موقعه الجغرافي حيث تم من خلاله حل مشكلة تجمعات المياه في الحي والمنطقة السكنية والتجارية المحيطة به."
-  },
-  { kicker: "المالك", title: "أمانة جدة", text: "تم طرح المشروع من قبل أمانة جدة (وزارة الشؤون البلدية والقروية).", logo: entityLogos.owner, logoAlt: "شعار أمانة جدة", entityOnly: true },
-  { kicker: "استشاري الإشراف", title: "WSP", text: "استشاري الإشراف على التنفيذ.", logo: entityLogos.consultant, logoAlt: "شعار WSP", entityOnly: true },
-  {
-    kicker: "المقاول المنفذ",
-    title: "شركة اليمامة للمقاولات",
-    text:
-      "تم تنفيذ المشروع من قبل شركة اليمامة للمقاولات وهي من الشركات الوطنية الرائدة في مجال المقاولات ولديها الخبرة الواسعة وأحدث التقنيات في مجال البنية التحتية.",
-    logo: entityLogos.contractor,
-    logoAlt: "شعار شركة اليمامة للمقاولات",
-    entityOnly: true
-  }
+const overviewLead = {
+  kicker: "نظرة عامة حول المشروع",
+  title: "تعريف المشروع",
+  text:
+    "يعتبر مشروع تنفيذ حلول لتصريف مياه الأمطار لطريق الملك فيصل (عابر القارات سابقا) – أبحر الشمالية من احدى مشاريع برنامج تصريف مياه الأمطار بمحافظة جدة والذي تأتي أهميته من موقعه الجغرافي حيث تم من خلاله حل مشكلة تجمعات المياه في الحي والمنطقة السكنية والتجارية المحيطة به."
+};
+
+const overviewEntityItems = [
+  { kicker: "الجهة المالكة", title: "أمانة جدة", logo: entityLogos.owner, logoAlt: "شعار أمانة جدة" },
+  { kicker: "استشاري الإشراف", title: "WSP", logo: entityLogos.consultant, logoAlt: "شعار WSP" },
+  { kicker: "المقاول المنفذ", title: "شركة اليمامة للمقاولات", logo: entityLogos.contractor, logoAlt: "شعار شركة اليمامة للمقاولات" }
 ];
 
 const overviewMetrics = [
@@ -371,7 +364,8 @@ const chapterGrid = document.getElementById("chapterGrid");
 const strategyGrid = document.getElementById("strategyGrid");
 const visionStatementCard = document.getElementById("visionStatement");
 const strategicGrid = document.getElementById("strategicGrid");
-const overviewGrid = document.getElementById("overviewGrid");
+const overviewLeadCard = document.getElementById("overviewLeadCard");
+const overviewEntityGrid = document.getElementById("overviewEntityGrid");
 const metricGrid = document.getElementById("metricGrid");
 const projectDataGrid = document.getElementById("projectDataGrid");
 const componentMetricGrid = document.getElementById("componentMetricGrid");
@@ -544,6 +538,24 @@ function renderStatementCard(container, item) {
     <h3>${item.title}</h3>
     <p>${item.text}</p>
   `;
+}
+
+function renderEntityCards(container, items) {
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML = items
+    .map(
+      (item) => `
+        <article class="entity-overview-card reveal" aria-label="${item.kicker}">
+          <p class="entity-overview-role">${item.kicker}</p>
+          <span class="entity-card-mark entity-card-mark--simple"><img src="${item.logo}" alt="${item.logoAlt || item.title}" ${lazyImageAttrs}></span>
+          <h3>${item.title}</h3>
+        </article>
+      `
+    )
+    .join("");
 }
 
 function renderMetrics(container, items, className = "metric-card") {
@@ -1382,7 +1394,8 @@ function render() {
   renderDetailCards(strategyGrid, strategyItems);
   renderStatementCard(visionStatementCard, visionStatement);
   renderDetailCards(strategicGrid, strategicItems);
-  renderDetailCards(overviewGrid, overviewItems);
+  renderStatementCard(overviewLeadCard, overviewLead);
+  renderEntityCards(overviewEntityGrid, overviewEntityItems);
   renderMetrics(metricGrid, overviewMetrics);
   renderDetailCards(projectDataGrid, projectDataItems);
   renderMetrics(componentMetricGrid, componentMetrics);
