@@ -528,6 +528,47 @@ textarea {
   text-align: center;
 }
 
+.detail-card--with-icon {
+  text-align: center;
+}
+
+.detail-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 74px;
+  height: 74px;
+  margin: 0 auto 14px;
+  border: 1px solid rgba(29, 63, 140, 0.12);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(15, 127, 149, 0.09), transparent 58%),
+    linear-gradient(180deg, #ffffff, #eef4fb);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 12px 28px rgba(29, 63, 140, 0.08);
+}
+
+.detail-card-icon img {
+  width: auto;
+  height: auto;
+  max-width: 42px;
+  max-height: 42px;
+  object-fit: contain;
+}
+
+.detail-card-head--with-icon {
+  display: block;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.detail-card-head--with-icon .section-kicker {
+  margin-bottom: 4px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 .detail-card-head--with-logo .section-kicker {
   margin-bottom: 4px;
   letter-spacing: 0;
@@ -725,6 +766,10 @@ textarea {
 }
 
 .detail-card--entity p:last-child {
+  text-align: center;
+}
+
+.detail-card--with-icon p:last-child {
   text-align: center;
 }
 
@@ -1004,20 +1049,27 @@ textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 66px;
-  height: 66px;
-  flex: 0 0 66px;
-  padding: 10px;
-  border: 1px solid rgba(29, 63, 140, 0.1);
-  border-radius: 18px;
-  background: linear-gradient(180deg, #ffffff, #eef4fb);
-  box-shadow: 0 10px 24px rgba(29, 63, 140, 0.08);
+  width: 82px;
+  height: 82px;
+  flex: 0 0 82px;
+  padding: 12px;
+  border: 1px solid rgba(29, 63, 140, 0.12);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(15, 127, 149, 0.1), transparent 58%),
+    linear-gradient(180deg, #ffffff, #edf3fb);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 12px 28px rgba(29, 63, 140, 0.08);
 }
 
 .metric-icon img {
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(22%) sepia(45%) saturate(1471%) hue-rotate(192deg) brightness(91%) contrast(93%);
 }
 
 .metric-card strong {
@@ -1099,6 +1151,31 @@ textarea {
   border-radius: 14px;
   color: white;
   background: linear-gradient(135deg, var(--brand), var(--teal));
+}
+
+.phase-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 86px;
+  height: 86px;
+  margin: 0 auto 14px;
+  border: 1px solid rgba(29, 63, 140, 0.12);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(15, 127, 149, 0.08), transparent 58%),
+    linear-gradient(180deg, #ffffff, #eef4fb);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 12px 28px rgba(29, 63, 140, 0.08);
+}
+
+.phase-card-icon img {
+  width: auto;
+  height: auto;
+  max-width: 54px;
+  max-height: 54px;
+  object-fit: contain;
 }
 
 .phase-card h3 {
@@ -2101,6 +2178,8 @@ textarea {
   .metric-card-top--icon {
     justify-content: center;
     text-align: center;
+    flex-direction: column;
+    gap: 12px;
   }
 }
 
