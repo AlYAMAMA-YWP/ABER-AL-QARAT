@@ -507,7 +507,7 @@ function renderDetailCards(container, items) {
   container.innerHTML = items
     .map(
       (item) => `
-        <article class="detail-card reveal">
+        <article class="detail-card ${item.logo ? "detail-card--entity" : ""} reveal">
           <div class="detail-card-head ${item.logo ? "detail-card-head--with-logo" : ""}">
             ${item.logo ? `<span class="entity-card-mark"><img src="${item.logo}" alt="${item.logoAlt || item.title}" ${lazyImageAttrs}></span>` : ""}
             <div>
