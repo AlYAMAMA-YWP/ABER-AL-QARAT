@@ -1597,7 +1597,10 @@ function animateCounter(counter) {
 
 function initCounters() {
   const counters = Array.from(document.querySelectorAll("[data-counter]")).filter((counter) => !counter.dataset.counterBound);
-  if (!counters.length || typeof IntersectionObserver === "undefined" || isMobileViewport()) {
+  const prefersReducedMotion =
+    typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!counters.length || typeof IntersectionObserver === "undefined" || prefersReducedMotion) {
     counters.forEach((counter) => {
       counter.dataset.counterBound = "true";
       counter.textContent = numberFormatter.format(Number(counter.dataset.counter || 0));
@@ -1606,6 +1609,7 @@ function initCounters() {
   }
 
   if (!counterObserver) {
+    const isMobile = isMobileViewport();
     counterObserver = new IntersectionObserver(
       (entries, observer) => {
         entries.forEach((entry) => {
@@ -1616,7 +1620,7 @@ function initCounters() {
           }
         });
       },
-      { threshold: 0.45 }
+      { threshold: isMobile ? 0.18 : 0.45, rootMargin: isMobile ? "0px 0px -8% 0px" : "0px" }
     );
   }
 
