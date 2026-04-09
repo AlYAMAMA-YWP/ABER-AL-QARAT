@@ -1486,8 +1486,7 @@ textarea {
 
 .safety-feature-card {
   display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
-  gap: 24px;
+  gap: 22px;
   align-items: start;
 }
 
@@ -1512,12 +1511,14 @@ textarea {
 }
 
 .safety-feature-media-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .safety-feature-group {
   display: grid;
   gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
 }
 
 .safety-feature-group h4 {
@@ -1542,6 +1543,7 @@ textarea {
 
 .safety-feature-group-grid--single {
   grid-template-columns: minmax(0, 220px);
+  justify-content: start;
 }
 
 .safety-feature-thumb {
@@ -1565,6 +1567,12 @@ textarea {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
+}
+
+@media (max-width: 1280px) {
+  .safety-feature-media-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .quality-layout {
