@@ -903,6 +903,55 @@ function renderSectionForSelector(selector) {
   });
 }
 
+function getSectionsForSelector(selector) {
+  if (!selector || !selector.startsWith("#")) {
+    return [];
+  }
+
+  const target = document.querySelector(selector);
+  if (!target) {
+    return [];
+  }
+
+  const sections = Array.from(document.querySelectorAll("main .section"));
+  const targetIndex = sections.findIndex((section) => section === target);
+  return targetIndex === -1 ? [target] : sections.slice(0, targetIndex + 1);
+}
+
+function prepareSectionsForSelector(selector) {
+  const heavySelector = ".gallery-shell, .subsection-stack, .task-columns, .stage-grid, .equipment-gallery, .component-gallery, .photo-grid, .safety-gallery, .logo-wall, .doc-grid, .process-grid, .criteria-grid";
+
+  getSectionsForSelector(selector).forEach((section) => {
+    section.style.contentVisibility = "visible";
+    section.style.containIntrinsicSize = "auto";
+
+    section.querySelectorAll(heavySelector).forEach((block) => {
+      block.style.contentVisibility = "visible";
+      block.style.containIntrinsicSize = "auto";
+    });
+  });
+}
+
+function getSelectorScrollTop(selector) {
+  const target = document.querySelector(selector);
+  if (!target) {
+    return null;
+  }
+
+  const spacing = window.innerWidth <= 420 ? 10 : window.innerWidth <= 820 ? 14 : 18;
+  return Math.max(target.getBoundingClientRect().top + window.scrollY - spacing, 0);
+}
+
+function scrollToSelector(selector, behavior = "smooth") {
+  const top = getSelectorScrollTop(selector);
+  if (top === null) {
+    return;
+  }
+
+  setActiveScrollLink(selector);
+  window.scrollTo({ top, behavior });
+}
+
 function setupDeferredSections() {
   if (typeof IntersectionObserver === "undefined") {
     deferredSectionIds.forEach((sectionId) => renderDeferredSection(sectionId));
@@ -1461,14 +1510,17 @@ function initScrollButtons() {
   Array.from(document.querySelectorAll("[data-scroll]")).forEach((button) => {
     button.addEventListener("click", () => {
       renderSectionForSelector(button.dataset.scroll);
+      prepareSectionsForSelector(button.dataset.scroll);
+
+      const motion = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth";
 
       window.requestAnimationFrame(() => {
         window.requestAnimationFrame(() => {
-          const target = document.querySelector(button.dataset.scroll);
-          if (target) {
-            setActiveScrollLink(button.dataset.scroll);
-            target.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
+          scrollToSelector(button.dataset.scroll, motion);
+          window.setTimeout(() => scrollToSelector(button.dataset.scroll, "auto"), 220);
+          window.setTimeout(() => scrollToSelector(button.dataset.scroll, "auto"), 520);
         });
       });
     });
