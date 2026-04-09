@@ -87,15 +87,16 @@ const overviewItems = [
     text:
       "يعتبر مشروع تنفيذ حلول لتصريف مياه الأمطار لطريق الملك فيصل (عابر القارات سابقا) – أبحر الشمالية من احدى مشاريع برنامج تصريف مياه الأمطار بمحافظة جدة والذي تأتي أهميته من موقعه الجغرافي حيث تم من خلاله حل مشكلة تجمعات المياه في الحي والمنطقة السكنية والتجارية المحيطة به."
   },
-  { kicker: "المالك", title: "أمانة جدة", text: "تم طرح المشروع من قبل أمانة جدة (وزارة الشؤون البلدية والقروية).", logo: entityLogos.owner, logoAlt: "شعار أمانة جدة" },
-  { kicker: "استشاري الإشراف", title: "WSP", text: "استشاري الإشراف على التنفيذ.", logo: entityLogos.consultant, logoAlt: "شعار WSP" },
+  { kicker: "المالك", title: "أمانة جدة", text: "تم طرح المشروع من قبل أمانة جدة (وزارة الشؤون البلدية والقروية).", logo: entityLogos.owner, logoAlt: "شعار أمانة جدة", entityOnly: true },
+  { kicker: "استشاري الإشراف", title: "WSP", text: "استشاري الإشراف على التنفيذ.", logo: entityLogos.consultant, logoAlt: "شعار WSP", entityOnly: true },
   {
     kicker: "المقاول المنفذ",
     title: "شركة اليمامة للمقاولات",
     text:
       "تم تنفيذ المشروع من قبل شركة اليمامة للمقاولات وهي من الشركات الوطنية الرائدة في مجال المقاولات ولديها الخبرة الواسعة وأحدث التقنيات في مجال البنية التحتية.",
     logo: entityLogos.contractor,
-    logoAlt: "شعار شركة اليمامة للمقاولات"
+    logoAlt: "شعار شركة اليمامة للمقاولات",
+    entityOnly: true
   }
 ];
 
@@ -506,18 +507,29 @@ function renderDetailCards(container, items) {
 
   container.innerHTML = items
     .map(
-      (item) => `
-        <article class="detail-card ${item.logo ? "detail-card--entity" : ""} reveal">
-          <div class="detail-card-head ${item.logo ? "detail-card-head--with-logo" : ""}">
-            ${item.logo ? `<span class="entity-card-mark"><img src="${item.logo}" alt="${item.logoAlt || item.title}" ${lazyImageAttrs}></span>` : ""}
-            <div>
-              ${item.kicker ? `<p class="section-kicker">${item.kicker}</p>` : ""}
+      (item) => {
+        if (item.logo && item.entityOnly) {
+          return `
+            <article class="detail-card detail-card--entity-simple reveal" aria-label="${item.kicker || item.title}">
+              <span class="entity-card-mark entity-card-mark--simple"><img src="${item.logo}" alt="${item.logoAlt || item.title}" ${lazyImageAttrs}></span>
               <h3>${item.title}</h3>
+            </article>
+          `;
+        }
+
+        return `
+          <article class="detail-card ${item.logo ? "detail-card--entity" : ""} reveal">
+            <div class="detail-card-head ${item.logo ? "detail-card-head--with-logo" : ""}">
+              ${item.logo ? `<span class="entity-card-mark"><img src="${item.logo}" alt="${item.logoAlt || item.title}" ${lazyImageAttrs}></span>` : ""}
+              <div>
+                ${item.kicker ? `<p class="section-kicker">${item.kicker}</p>` : ""}
+                <h3>${item.title}</h3>
+              </div>
             </div>
-          </div>
-          <p>${item.text}</p>
-        </article>
-      `
+            <p>${item.text}</p>
+          </article>
+        `;
+      }
     )
     .join("");
 }
