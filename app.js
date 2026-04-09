@@ -11,6 +11,7 @@ const numberFormatter = new Intl.NumberFormat("ar-SA");
 const lazyImageAttrs = 'loading="lazy" decoding="async"';
 const MODAL_MAX_SCALE = 5;
 const deferredSectionIds = ["components", "maps", "field", "equipment", "quality", "safety", "partners"];
+const isMobileViewport = () => typeof window !== "undefined" && window.innerWidth <= 820;
 
 const entityLogos = {
   owner: png(2),
@@ -251,12 +252,12 @@ const standardsLeadCopy =
   "راعى مشروع تنفيذ حلول لتصريف مياه الأمطار لطريق الملك فيصل (عابر القارات سابقا) – أبحر الشمالية، اتباع المعايير الفنية والهندسية التي تضمن الجودة في التنفيذ والإخراج ومنها أنظمة الجودة العالمية الايزو ISO9001 والعديد من المواصفات الوطنية والدولية والأكواد والأدلة المرجعية المختلفة.";
 
 const standardItems = [
-  { src: png(78), title: "الهيئة العربية السعودية للمواصفات والمقاييس", caption: "" },
-  { src: png(76), title: "ISO", caption: "" },
-  { src: png(77), title: "مواصفات وزارة الشؤون البلدية والقروية", caption: "" },
-  { src: png(74), title: "الجمعية الأمريكية لمهندسي الطرق", caption: "" },
-  { src: png(79), title: "مواصفات وزارة النقل السعودية", caption: "" },
-  { src: png(75), title: "المواصفات القياسية البريطانية", caption: "" }
+  { src: png(78), title: "الهيئة العربية السعودية للمواصفات والمقاييس", caption: "", interactive: false },
+  { src: png(76), title: "ISO", caption: "", interactive: false },
+  { src: png(77), title: "مواصفات وزارة الشؤون البلدية والقروية", caption: "", interactive: false },
+  { src: png(74), title: "الجمعية الأمريكية لمهندسي الطرق", caption: "", interactive: false },
+  { src: png(79), title: "مواصفات وزارة النقل السعودية", caption: "", interactive: false },
+  { src: png(75), title: "المواصفات القياسية البريطانية", caption: "", interactive: false }
 ];
 
 const materialLeadCopy =
@@ -1025,10 +1026,16 @@ function renderWall(container, items, kicker) {
   container.innerHTML = items
     .map(
       (item) => `
-        <article class="logo-card reveal">
-          <button type="button" data-modal-src="${item.src}" data-modal-title="${item.title}" data-modal-caption="${item.caption || ""}" data-modal-kicker="${kicker}">
+        <article class="logo-card reveal${item.interactive === false ? " logo-card--static" : ""}">
+          ${
+            item.interactive === false
+              ? `<div class="logo-card-media" aria-label="${item.title}">
             <img src="${item.src}" alt="${item.title}" ${lazyImageAttrs}>
-          </button>
+          </div>`
+              : `<button class="logo-card-media" type="button" data-modal-src="${item.src}" data-modal-title="${item.title}" data-modal-caption="${item.caption || ""}" data-modal-kicker="${kicker}">
+            <img src="${item.src}" alt="${item.title}" ${lazyImageAttrs}>
+          </button>`
+          }
           <div class="logo-card-copy">
             <strong>${item.title}</strong>
           </div>
@@ -1451,7 +1458,7 @@ function animateCounter(counter) {
 
 function initCounters() {
   const counters = Array.from(document.querySelectorAll("[data-counter]")).filter((counter) => !counter.dataset.counterBound);
-  if (!counters.length || typeof IntersectionObserver === "undefined") {
+  if (!counters.length || typeof IntersectionObserver === "undefined" || isMobileViewport()) {
     counters.forEach((counter) => {
       counter.dataset.counterBound = "true";
       counter.textContent = numberFormatter.format(Number(counter.dataset.counter || 0));
@@ -1486,7 +1493,7 @@ function initReveals() {
     return;
   }
 
-  if (typeof IntersectionObserver === "undefined") {
+  if (typeof IntersectionObserver === "undefined" || isMobileViewport()) {
     items.forEach((item) => {
       item.dataset.revealBound = "true";
       item.classList.add("is-visible");
@@ -1521,7 +1528,7 @@ function initScrollButtons() {
       renderSectionForSelector(button.dataset.scroll);
       prepareSectionsForSelector(button.dataset.scroll);
 
-      const motion = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      const motion = isMobileViewport() || (typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches)
         ? "auto"
         : "smooth";
 
@@ -1554,7 +1561,7 @@ function initScrollSpy() {
 
   const updateActiveSection = () => {
     frame = 0;
-    const offset = window.scrollY + Math.max(window.innerHeight * 0.28, 220);
+    const offset = window.scrollY + (isMobileViewport() ? 120 : Math.max(window.innerHeight * 0.28, 220));
     let activeSelector = sectionMap[0].selector;
 
     sectionMap.forEach((item) => {
