@@ -110,13 +110,34 @@ const overviewMetrics = [
 const projectDataItems = [
   { kicker: "بيانات المشروع", title: "رقم المشروع", text: "4/001/0602/03/00/4" },
   { kicker: "اسم المشروع", title: "تنفيذ حلول لتصريف مياه الأمطار لطريق الملك فيصل", text: "(عابر القارات سابقا) – أبحر الشمالية." },
-  { kicker: "الجهة الطارحة", title: "أمانة جدة", text: "تم طرح المشروع من قبل أمانة جدة (وزارة الشؤون البلدية والقروية)." }
+  { kicker: "الجهة المالكة", title: "أمانة جدة", text: "أمانة جدة (وزارة الشؤون البلدية والقروية)." }
 ];
 
 const componentMetrics = [
-  { value: 26000, unit: "م", label: "أطوال المواسير", detail: "مجموعة كبيرة من المواسير بأقطار مختلفة موزعة على شوارع وطرق المنطقة المخدومة بالمشروع." },
-  { value: 495, unit: "مصيدة", label: "مصائد تجميع المياه", detail: "تعمل على تجميع مياه الأمطار وتوزيعها داخل خطوط نقل المياه بالشبكة." },
-  { value: 154, unit: "غرفة", label: "غرف التفتيش", detail: "تربط الخطوط بعضها البعض وتسهل من عمليات الصيانة المستقبلية." }
+  {
+    value: 26000,
+    unit: "م",
+    label: "أطوال المواسير",
+    detail: "مجموعة كبيرة من المواسير بأقطار مختلفة موزعة على شوارع وطرق المنطقة المخدومة بالمشروع.",
+    icon: "assets/media/component-icon-pipes.png",
+    iconAlt: "أيقونة المواسير"
+  },
+  {
+    value: 495,
+    unit: "مصيدة",
+    label: "مصائد تجميع المياه",
+    detail: "تعمل على تجميع مياه الأمطار وتوزيعها داخل خطوط نقل المياه بالشبكة.",
+    icon: "assets/media/component-icon-catchpit.png",
+    iconAlt: "أيقونة مصائد تجميع مياه الأمطار"
+  },
+  {
+    value: 154,
+    unit: "غرفة",
+    label: "غرف التفتيش",
+    detail: "تربط الخطوط بعضها البعض وتسهل من عمليات الصيانة المستقبلية.",
+    icon: "assets/media/component-icon-manhole.png",
+    iconAlt: "أيقونة غرف التفتيش"
+  }
 ];
 
 const componentItems = [
@@ -595,7 +616,10 @@ function renderMetrics(container, items, className = "metric-card") {
     .map(
       (metric) => `
         <article class="${className} reveal">
-          <small>${metric.label}</small>
+          <div class="metric-card-top${metric.icon ? " metric-card-top--icon" : ""}">
+            ${metric.icon ? `<span class="metric-icon" aria-hidden="true"><img src="${metric.icon}" alt="${metric.iconAlt || metric.label}" ${lazyImageAttrs}></span>` : ""}
+            <small>${metric.label}</small>
+          </div>
           <strong>
             <span class="counter" data-counter="${metric.value}">0</span>
             <small>${metric.unit}</small>
