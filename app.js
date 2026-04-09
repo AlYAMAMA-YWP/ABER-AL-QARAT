@@ -223,9 +223,32 @@ const phases = [
   { title: "أعمال الاختبارات وتسليم الموقع", text: "تم في هذه المرحلة عمل الاختبارات والفحوصات اللازمة لشبكة تصريف الأمطار المنفذة للتأكد من فعاليتها وذلك لتسليم الموقع وانهاء العمل وإجراء تصوير تلفزيوني CCTV لجميع المواسير للتأكد من سلامتها وجاهزيتها.", icon: "assets/media/phase-icon-check.png", iconAlt: "أيقونة أعمال الاختبارات وتسليم الموقع" }
 ];
 
-const stageItems = range(20, 43)
-  .filter((value) => ![24, 25, 26, 27].includes(value))
-  .map((value) => ({ src: png(value), title: "صور مراحل العمل بالمشروع", caption: "" }));
+const stageItems = [
+  "stage-image41.jpg",
+  "stage-image42.jpg",
+  "stage-image43.jpg",
+  "stage-image44.jpeg",
+  "stage-image45.jpg",
+  "stage-image46.jpeg",
+  "stage-image47.jpeg",
+  "stage-image48.jpeg",
+  "stage-image49.jpeg",
+  "stage-image50.jpeg",
+  "stage-image51.jpeg",
+  "stage-image52.jpeg",
+  "stage-image53.jpeg",
+  "stage-image54.jpeg",
+  "stage-image55.png",
+  "stage-image56.jpeg",
+  "stage-image57.jpeg",
+  "stage-image52.jpeg",
+  "stage-image58.jpeg",
+  "stage-image59.jpeg",
+  "stage-image60.jpeg",
+  "stage-image61.jpg",
+  "stage-image62.jpeg",
+  "stage-image63.jpeg"
+].map((fileName) => ({ src: `assets/media/${fileName}`, title: "صور مراحل العمل بالمشروع", caption: "" }));
 
 const resourceItems = [
   { value: 192, unit: "فرد", label: "العنصر البشري", detail: "مهندس وعامل وفني ضمن فرق عمل صباحية ومسائية وفرق طوارئ مقسمة على مدار الساعة.", icon: "assets/media/equipment-icon-human.png", iconAlt: "أيقونة العنصر البشري" },
@@ -348,10 +371,8 @@ const verificationPmo = {
 };
 
 const safetyLead = {
-  kicker: "معايير الأمن والسلامة المهنية",
-  title: "بيئة عمل آمنة في جميع مواقع التنفيذ",
   text:
-    "تم اتباع مجموعة من الإجراءات والمعايير التي توفر بيئة آمنة للعمل وتحافظ على العمال في المشروع من أي مخاطر أو أضرار تؤدي إلى تعطل تنفيذ المشروع، كما تم توفير كافة الاحتياطات ووسائل الأمن والسلامة العامة لذلك حرصاً من أمانة جدة على سلامة العمال، والمعدات، والأدوات، والممتلكات العامة والخاصة."
+    "تم اتباع مجموعة من الإجراءات والمعايير التي توفر بيئة آمنة للعمل وتحافظ على العمال في المشروع من أي مخاطر او أضرار تؤدي الى تعطل تنفيذ المشروع، كما تم توفير كافة الاحتياطات ووسائل الأمن والسلامة العامة لذلك حرصاً من أمانة جدة على سلامة العمال، والمعدات، والأدوات، والمـمتلكات الـعـامـة والخـاصـة."
 };
 
 const safetyCriteriaItems = [
@@ -585,8 +606,8 @@ function renderStatementCard(container, item) {
 
   container.innerHTML = `
     ${item.kicker ? `<p class="section-kicker">${item.kicker}</p>` : ""}
-    <h3>${item.title}</h3>
-    <p>${item.text}</p>
+    ${item.title ? `<h3>${item.title}</h3>` : ""}
+    ${item.text ? `<p>${item.text}</p>` : ""}
   `;
 }
 
