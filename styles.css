@@ -162,7 +162,7 @@ textarea {
 }
 
 .topbar-project-line:last-child {
-  color: var(--text);
+  color: var(--brand);
   font-size: clamp(1.04rem, 1.55vw, 1.48rem);
 }
 
@@ -262,6 +262,11 @@ textarea {
 }
 
 @supports (content-visibility: auto) {
+  .section:not(#top):not(#contents):not(#strategy):not(#overview) {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 960px;
+  }
+
   .gallery-shell,
   .subsection-stack,
   .task-columns,
@@ -347,6 +352,12 @@ textarea {
   padding: 28px;
 }
 
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
 .hero-copy::before,
 .hero-media::before,
 .map-feature-card::before,
@@ -424,6 +435,7 @@ textarea {
 
 .hero-text {
   margin: 18px 0 0;
+  width: min(100%, 68ch);
   max-width: 68ch;
   font-size: 1.04rem;
   text-align: right;
@@ -777,6 +789,8 @@ textarea {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+  justify-content: flex-end;
+  width: 100%;
   margin-top: 26px;
 }
 
@@ -823,6 +837,7 @@ textarea {
 }
 
 .hero-banner {
+  width: 100%;
   margin-top: 24px;
   overflow: hidden;
   border: 1px solid var(--line);
@@ -1895,6 +1910,15 @@ textarea {
 
   .hero-title {
     justify-items: center;
+    text-align: center;
+  }
+
+  .hero-title-line {
+    text-align: center;
+  }
+
+  .hero-copy {
+    align-items: stretch;
   }
 
   .hero-copy,

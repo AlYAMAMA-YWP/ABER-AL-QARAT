@@ -1,4 +1,8 @@
 const state = { heroMedia: 0, mapMedia: 0 };
+const renderedSectionIds = new Set();
+let counterObserver;
+let revealObserver;
+let sectionObserver;
 
 const pad = (value) => String(value).padStart(3, "0");
 const png = (value) => `assets/media/carved_${pad(value)}.png`;
@@ -6,6 +10,7 @@ const range = (start, end) => Array.from({ length: end - start + 1 }, (_, index)
 const numberFormatter = new Intl.NumberFormat("ar-SA");
 const lazyImageAttrs = 'loading="lazy" decoding="async"';
 const MODAL_MAX_SCALE = 5;
+const deferredSectionIds = ["components", "maps", "field", "equipment", "quality", "safety", "partners"];
 
 const entityLogos = {
   owner: png(2),
@@ -451,6 +456,22 @@ function setZoomTarget(element, item, fallbackKicker) {
   element.dataset.modalKicker = item.kicker || fallbackKicker || "عرض تفصيلي";
 }
 
+function scheduleIdleTask(callback, timeout = 900) {
+  if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
+    window.requestIdleCallback(callback, { timeout });
+    return;
+  }
+
+  window.setTimeout(
+    () =>
+      callback({
+        didTimeout: true,
+        timeRemaining: () => 0
+      }),
+    64
+  );
+}
+
 function renderHeroBadges() {
   if (!heroBadgesContainer) {
     return;
@@ -763,6 +784,152 @@ function renderTaskPanel(container, section) {
     <h3>${section.title}</h3>
     <ul class="task-list">${section.items.map((item) => `<li>${item}</li>`).join("")}</ul>
   `;
+}
+
+function renderComponentsSection() {
+  renderMetrics(componentMetricGrid, componentMetrics);
+  renderDetailCards(componentGrid, componentItems);
+  renderSimpleGallery(componentGallery, componentGalleryItems, "مكونات المشروع");
+}
+
+function renderMapsSection() {
+  renderMapSection();
+  renderMapLegend();
+  renderDetailCards(siteGrid, siteItems);
+  renderDetailCards(streetGrid, streetItems);
+}
+
+function renderFieldSection() {
+  renderPhases();
+  renderSimpleGallery(stageGrid, stageItems, "مراحل العمل بالمشروع");
+}
+
+function renderEquipmentSection() {
+  renderMetrics(resourceGrid, resourceItems, "resource-card");
+  renderDetailCards(equipmentGrid, equipmentItems);
+  renderSimpleGallery(equipmentGallery, equipmentGalleryItems, "الأجهزة والمعدات والأدوات");
+}
+
+function renderQualitySection() {
+  renderStatementCard(qualityLeadCard, qualityLead);
+  renderDetailCards(qualityGrid, qualityItems);
+  if (standardsLeadText) standardsLeadText.textContent = standardsLeadCopy;
+  renderWall(standardsWall, standardItems, "المراجع الفنية والهندسية");
+  if (materialLeadText) materialLeadText.textContent = materialLeadCopy;
+  renderProcessGrid(materialProcessGrid, materialProcessItems);
+  renderSimpleGallery(materialGallery, materialGalleryItems, "معايير جودة الخامات");
+  renderDocGrid();
+  if (environmentLeadText) environmentLeadText.textContent = environmentLeadCopy;
+  renderDetailCards(environmentGrid, environmentItems);
+  renderSimpleGallery(environmentGallery, environmentGalleryItems, "معايير الجودة البيئية");
+  if (verificationLeadText) verificationLeadText.textContent = verificationLeadCopy;
+  renderTaskPanel(verificationExecutionPanel, verificationExecution);
+  renderTaskPanel(verificationPmoPanel, verificationPmo);
+}
+
+function renderSafetySection() {
+  renderStatementCard(safetyLeadCard, safetyLead);
+  renderCriteriaGrid(safetyCriteriaGrid, safetyCriteriaItems);
+  renderSafetyPoints();
+  renderSimpleGallery(safetyGallery, safetyGalleryItems, "الأمن والسلامة المهنية");
+  renderDetailCards(safetyDetailGrid, safetyDetailItems);
+}
+
+function renderPartnersSection() {
+  renderStatementCard(partnerStatementCard, partnerStatement);
+}
+
+function bindSectionEnhancements(sectionId) {
+  const section = document.getElementById(sectionId);
+  if (!section) {
+    return;
+  }
+
+  initCounters();
+  initReveals();
+  section.dataset.rendered = "true";
+}
+
+function renderDeferredSection(sectionId) {
+  if (!sectionId || renderedSectionIds.has(sectionId)) {
+    return;
+  }
+
+  switch (sectionId) {
+    case "components":
+      renderComponentsSection();
+      break;
+    case "maps":
+      renderMapsSection();
+      break;
+    case "field":
+      renderFieldSection();
+      break;
+    case "equipment":
+      renderEquipmentSection();
+      break;
+    case "quality":
+      renderQualitySection();
+      break;
+    case "safety":
+      renderSafetySection();
+      break;
+    case "partners":
+      renderPartnersSection();
+      break;
+    default:
+      return;
+  }
+
+  renderedSectionIds.add(sectionId);
+  bindSectionEnhancements(sectionId);
+}
+
+function renderSectionForSelector(selector) {
+  if (!selector || !selector.startsWith("#")) {
+    return;
+  }
+
+  renderDeferredSection(selector.slice(1));
+}
+
+function setupDeferredSections() {
+  if (typeof IntersectionObserver === "undefined") {
+    deferredSectionIds.forEach((sectionId) => renderDeferredSection(sectionId));
+    return;
+  }
+
+  if (!sectionObserver) {
+    sectionObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            renderDeferredSection(entry.target.id);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "720px 0px", threshold: 0.01 }
+    );
+  }
+
+  deferredSectionIds.forEach((sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (section && !renderedSectionIds.has(sectionId)) {
+      sectionObserver.observe(section);
+    }
+  });
+}
+
+function warmDeferredSections(index = 0) {
+  if (index >= deferredSectionIds.length) {
+    return;
+  }
+
+  scheduleIdleTask(() => {
+    renderDeferredSection(deferredSectionIds[index]);
+    warmDeferredSections(index + 1);
+  });
 }
 
 function renderSafetyPoints() {
@@ -1212,58 +1379,75 @@ function animateCounter(counter) {
 }
 
 function initCounters() {
-  const counters = Array.from(document.querySelectorAll("[data-counter]"));
+  const counters = Array.from(document.querySelectorAll("[data-counter]")).filter((counter) => !counter.dataset.counterBound);
   if (!counters.length || typeof IntersectionObserver === "undefined") {
     counters.forEach((counter) => {
+      counter.dataset.counterBound = "true";
       counter.textContent = numberFormatter.format(Number(counter.dataset.counter || 0));
     });
     return;
   }
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && !entry.target.dataset.counted) {
-          entry.target.dataset.counted = "true";
-          animateCounter(entry.target);
-        }
-      });
-    },
-    { threshold: 0.45 }
-  );
+  if (!counterObserver) {
+    counterObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !entry.target.dataset.counted) {
+            entry.target.dataset.counted = "true";
+            animateCounter(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.45 }
+    );
+  }
 
-  counters.forEach((counter) => observer.observe(counter));
+  counters.forEach((counter) => {
+    counter.dataset.counterBound = "true";
+    counterObserver.observe(counter);
+  });
 }
 
 function initReveals() {
-  const items = Array.from(document.querySelectorAll(".reveal"));
+  const items = Array.from(document.querySelectorAll(".reveal")).filter((item) => !item.dataset.revealBound);
   if (!items.length) {
     return;
   }
 
   if (typeof IntersectionObserver === "undefined") {
-    items.forEach((item) => item.classList.add("is-visible"));
+    items.forEach((item) => {
+      item.dataset.revealBound = "true";
+      item.classList.add("is-visible");
+    });
     return;
   }
 
   document.documentElement.classList.add("js-enabled");
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-        }
-      });
-    },
-    { threshold: 0.16, rootMargin: "0px 0px -36px 0px" }
-  );
+  if (!revealObserver) {
+    revealObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.16, rootMargin: "0px 0px -36px 0px" }
+    );
+  }
 
-  items.forEach((item) => observer.observe(item));
+  items.forEach((item) => {
+    item.dataset.revealBound = "true";
+    revealObserver.observe(item);
+  });
 }
 
 function initScrollButtons() {
   Array.from(document.querySelectorAll("[data-scroll]")).forEach((button) => {
     button.addEventListener("click", () => {
+      renderSectionForSelector(button.dataset.scroll);
       const target = document.querySelector(button.dataset.scroll);
       if (target) {
         setActiveScrollLink(button.dataset.scroll);
@@ -1397,6 +1581,7 @@ function attachEvents() {
 function render() {
   renderHeroBadges();
   renderChapterGrid();
+  renderHeroMedia();
   renderDetailCards(strategyGrid, strategyItems);
   renderStatementCard(visionStatementCard, visionStatement);
   renderDetailCards(strategicGrid, strategicItems);
@@ -1404,39 +1589,6 @@ function render() {
   renderEntityCards(overviewEntityGrid, overviewEntityItems);
   renderMetrics(metricGrid, overviewMetrics);
   renderDetailCards(projectDataGrid, projectDataItems);
-  renderMetrics(componentMetricGrid, componentMetrics);
-  renderDetailCards(componentGrid, componentItems);
-  renderSimpleGallery(componentGallery, componentGalleryItems, "مكونات المشروع");
-  renderHeroMedia();
-  renderMapSection();
-  renderMapLegend();
-  renderDetailCards(siteGrid, siteItems);
-  renderDetailCards(streetGrid, streetItems);
-  renderPhases();
-  renderSimpleGallery(stageGrid, stageItems, "مراحل العمل بالمشروع");
-  renderMetrics(resourceGrid, resourceItems, "resource-card");
-  renderDetailCards(equipmentGrid, equipmentItems);
-  renderSimpleGallery(equipmentGallery, equipmentGalleryItems, "الأجهزة والمعدات والأدوات");
-  renderStatementCard(qualityLeadCard, qualityLead);
-  renderDetailCards(qualityGrid, qualityItems);
-  if (standardsLeadText) standardsLeadText.textContent = standardsLeadCopy;
-  renderWall(standardsWall, standardItems, "المراجع الفنية والهندسية");
-  if (materialLeadText) materialLeadText.textContent = materialLeadCopy;
-  renderProcessGrid(materialProcessGrid, materialProcessItems);
-  renderSimpleGallery(materialGallery, materialGalleryItems, "معايير جودة الخامات");
-  renderDocGrid();
-  if (environmentLeadText) environmentLeadText.textContent = environmentLeadCopy;
-  renderDetailCards(environmentGrid, environmentItems);
-  renderSimpleGallery(environmentGallery, environmentGalleryItems, "معايير الجودة البيئية");
-  if (verificationLeadText) verificationLeadText.textContent = verificationLeadCopy;
-  renderTaskPanel(verificationExecutionPanel, verificationExecution);
-  renderTaskPanel(verificationPmoPanel, verificationPmo);
-  renderStatementCard(safetyLeadCard, safetyLead);
-  renderCriteriaGrid(safetyCriteriaGrid, safetyCriteriaItems);
-  renderSafetyPoints();
-  renderSimpleGallery(safetyGallery, safetyGalleryItems, "الأمن والسلامة المهنية");
-  renderDetailCards(safetyDetailGrid, safetyDetailItems);
-  renderStatementCard(partnerStatementCard, partnerStatement);
 }
 
 render();
@@ -1446,3 +1598,6 @@ initScrollSpy();
 initCounters();
 initReveals();
 initModalZoom();
+setupDeferredSections();
+renderSectionForSelector(window.location.hash);
+window.setTimeout(() => warmDeferredSections(), 180);
