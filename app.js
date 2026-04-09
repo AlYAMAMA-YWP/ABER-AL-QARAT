@@ -395,22 +395,42 @@ const safetyDetailItems = [
   { kicker: "اللقاءات الدورية", title: "الالتزام بالاشتراطات المطلوبة", text: "تم عقد لقاءات واجتماعات دورية بالعمال ومهندسي المواقع لتوضيح خطة الأمن والسلامة والوقوف على مدى الالتزام بالمعايير والاشتراطات المطلوبة لتفادي المخاطر والحفاظ على الأرواح والممتلكات." }
 ];
 
-const safetyGalleryItems = [
-  "safety-original-image112.jpeg",
-  "safety-original-image113.jpg",
-  "safety-original-image114.jpeg",
-  "safety-original-image115.jpeg",
-  "safety-original-image116.jpg",
-  "safety-original-image117.jpg",
-  "safety-original-image118.jpeg",
-  "safety-original-image119.jpeg",
-  "safety-original-image120.jpeg",
-  "safety-original-image121.jpeg"
-].map((fileName) => ({
-  src: `assets/media/${fileName}`,
-  title: "أعمال الأمن والسلامة المهنية بالمشروع",
-  caption: ""
-}));
+const safetyFeatureCards = [
+  {
+    title: "اللوحات الإرشادية",
+    text:
+      "تم استخدام اللوحات الإرشادية على الطرق في المشروع كإحدى وسائل السلامة المرورية لتنبيه قائدي المركبات بالإرشادات والتعليمات المتعلقة بالتحويلات المرورية وأحوال الطرق، وذلك بالتنسيق مع الإدارة العامة لشرطة المرور بمحافظة جدة.",
+    images: [
+      "safety-original-image114.jpeg",
+      "safety-original-image113.jpg",
+      "safety-original-image115.jpeg",
+      "safety-original-image112.jpeg"
+    ].map((fileName) => ({
+      src: `assets/media/${fileName}`,
+      title: "اللوحات الإرشادية",
+      caption: ""
+    }))
+  },
+  {
+    title: "خطة الأمن والسلامة",
+    text:
+      "تم تنفيذ المشروع وفقاً لخطة أمن وسلامة محكمة في جميع مواقع العمل وعلى مدار الساعة، كما تم عقد لقاءات واجتماعات دورية بالعمال ومهندسي المواقع لتوضيح هذه الخطة والوقوف علي مدى الالتزام بالمعايير والاشتراطات المطلوبة لتفادي المخاطر والحفاظ على الأرواح والممتلكات.",
+    groups: [
+      {
+        label: "خطة السلامة والتحويلات المرورية نهاراً.",
+        images: ["safety-original-image117.jpg", "safety-original-image116.jpg", "safety-original-image121.jpeg"]
+      },
+      {
+        label: "خطة السلامة والتحويلات المرورية ليلاً.",
+        images: ["safety-original-image118.jpeg", "safety-original-image120.jpeg"]
+      },
+      {
+        label: "اللقاءات الدورية لتوضيح خطط السلامة.",
+        images: ["safety-original-image119.jpeg"]
+      }
+    ]
+  }
+];
 
 const partnerStatement = {
   kicker: "في النهاية",
@@ -777,6 +797,69 @@ function renderSimpleGallery(container, items, kicker) {
   container.innerHTML = items.map((item) => createGalleryCard(item, kicker)).join("");
 }
 
+function createSafetyFeatureCard(card) {
+  const mediaMarkup = card.images
+    ? `
+      <div class="safety-feature-media-grid">
+        ${card.images
+          .map(
+            (item) => `
+              <article class="safety-feature-thumb">
+                <button type="button" data-modal-src="${item.src}" data-modal-title="${item.title}" data-modal-caption="" data-modal-kicker="الأمن والسلامة المهنية">
+                  <img src="${item.src}" alt="${item.title}" ${lazyImageAttrs}>
+                </button>
+              </article>
+            `
+          )
+          .join("")}
+      </div>
+    `
+    : `
+      <div class="safety-feature-groups">
+        ${card.groups
+          .map(
+            (group) => `
+              <section class="safety-feature-group">
+                <h4>${group.label}</h4>
+                <div class="safety-feature-group-grid safety-feature-group-grid--${group.images.length === 1 ? "single" : group.images.length === 2 ? "double" : "triple"}">
+                  ${group.images
+                    .map(
+                      (src) => `
+                        <article class="safety-feature-thumb">
+                          <button type="button" data-modal-src="assets/media/${src}" data-modal-title="${card.title}" data-modal-caption="" data-modal-kicker="الأمن والسلامة المهنية">
+                            <img src="assets/media/${src}" alt="${card.title}" ${lazyImageAttrs}>
+                          </button>
+                        </article>
+                      `
+                    )
+                    .join("")}
+                </div>
+              </section>
+            `
+          )
+          .join("")}
+      </div>
+    `;
+
+  return `
+    <article class="subsection-card reveal safety-feature-card">
+      <div class="safety-feature-copy">
+        <h3>${card.title}</h3>
+        <p>${card.text}</p>
+      </div>
+      ${mediaMarkup}
+    </article>
+  `;
+}
+
+function renderSafetyFeatureCards(container, items) {
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML = items.map((item) => createSafetyFeatureCard(item)).join("");
+}
+
 function renderPhases() {
   if (!phaseGrid) {
     return;
@@ -889,7 +972,7 @@ function renderQualitySection() {
 function renderSafetySection() {
   renderStatementCard(safetyLeadCard, safetyLead);
   renderCriteriaGrid(safetyCriteriaGrid, safetyCriteriaItems);
-  renderSimpleGallery(safetyGallery, safetyGalleryItems, "الأمن والسلامة المهنية");
+  renderSafetyFeatureCards(safetyGallery, safetyFeatureCards);
 }
 
 function renderPartnersSection() {
