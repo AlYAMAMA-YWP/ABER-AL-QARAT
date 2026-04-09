@@ -699,13 +699,7 @@ function createMediaFigure(item, className, kicker = "") {
   return `
     <article class="${className} reveal">
       <button type="button" data-modal-src="${item.src}" data-modal-title="${item.title}" data-modal-caption="${item.caption || ""}" data-modal-kicker="${kicker || item.kicker || ""}">
-        <figure>
-          <img src="${item.src}" alt="${item.title}" ${lazyImageAttrs}>
-          <figcaption>
-            <h3>${item.title}</h3>
-            ${item.caption ? `<p>${item.caption}</p>` : ""}
-          </figcaption>
-        </figure>
+        <img src="${item.src}" alt="${item.title}" ${lazyImageAttrs}>
       </button>
     </article>
   `;

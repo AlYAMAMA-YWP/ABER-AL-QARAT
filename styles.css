@@ -444,6 +444,15 @@ textarea {
   text-align: right;
 }
 
+.media-caption,
+.map-meta,
+.photo-card figcaption,
+.safety-card figcaption,
+.doc-card figcaption,
+.modal-meta {
+  display: none !important;
+}
+
 .hero-badges,
 .hero-summary-grid {
   margin-top: 22px;
