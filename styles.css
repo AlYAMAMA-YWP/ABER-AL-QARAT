@@ -2359,7 +2359,7 @@ textarea {
   }
 
   .topbar {
-    background: #fff;
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     border-radius: 28px;
@@ -2368,8 +2368,9 @@ textarea {
   }
 
   .topbar::before {
-    opacity: 0.64;
-    background-position: center, center, center;
+    opacity: 0.72;
+    background-position: center, center, left center;
+    background-size: cover, cover, 145%;
   }
 
   .modal-backdrop {
@@ -2421,14 +2422,19 @@ textarea {
   }
 
   .topbar-project-title {
-    gap: 2px;
+    gap: 6px;
   }
 
   .topbar-project-line {
     max-width: 100%;
-    font-size: 0.95rem;
-    line-height: 1.8;
+    font-size: clamp(1.04rem, 2.45vw, 1.24rem);
+    line-height: 1.7;
     white-space: normal;
+  }
+
+  .topbar-project-line:last-child {
+    font-size: clamp(1rem, 2.3vw, 1.16rem);
+    line-height: 1.64;
   }
 
   .topnav {
@@ -2449,6 +2455,10 @@ textarea {
     align-items: center;
     justify-content: center;
     text-align: center;
+    color: #21457c;
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(29, 63, 140, 0.12);
+    box-shadow: 0 8px 18px rgba(29, 63, 140, 0.08);
   }
 
   .topnav .nav-link[data-scroll="#contents"] { order: 1; }
@@ -2602,20 +2612,54 @@ textarea {
   }
 
   .topbar {
+    gap: 18px;
     padding: 18px 14px 22px;
   }
 
+  .topbar::before {
+    opacity: 0.74;
+    background-position: center, center, left center;
+    background-size: cover, cover, 165%;
+  }
+
   .topnav {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-auto-rows: minmax(54px, auto);
+    gap: 12px 10px;
   }
 
   .topnav-column {
-    gap: 18px;
+    display: contents !important;
+    gap: 0;
   }
 
   .nav-link {
-    font-size: 0.95rem;
+    width: 100%;
+    min-height: 54px;
+    padding: 11px 12px;
+    justify-content: center;
+    font-size: 0.98rem;
+    line-height: 1.3;
+  }
+
+  .topnav .nav-link[data-scroll="#partners"] {
+    grid-column: auto !important;
+    justify-self: stretch;
+    width: 100%;
+  }
+
+  .topbar-project-title {
+    gap: 4px;
+  }
+
+  .topbar-project-line {
+    font-size: clamp(1rem, 4.4vw, 1.18rem);
+    line-height: 1.68;
+  }
+
+  .topbar-project-line:last-child {
+    font-size: clamp(0.98rem, 4.1vw, 1.1rem);
+    line-height: 1.62;
   }
 
   .nav-link.is-active::after {
@@ -2669,24 +2713,41 @@ textarea {
   }
 
   .topbar {
-    gap: 16px;
-    padding: 16px 10px 18px;
+    gap: 18px;
+    padding: 18px 12px 20px;
     border-radius: 24px;
   }
 
+  .topbar::before {
+    opacity: 0.76;
+    background-position: center, center, left center;
+    background-size: cover, cover, 178%;
+  }
+
   .topnav {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-auto-rows: minmax(52px, auto);
     gap: 10px;
   }
 
   .topnav-column {
-    gap: 10px;
+    display: contents !important;
+    gap: 0;
   }
 
   .nav-link {
     width: 100%;
     justify-content: center;
-    font-size: 0.92rem;
+    min-height: 52px;
+    padding: 10px 12px;
+    font-size: 0.96rem;
+    line-height: 1.3;
+  }
+
+  .topnav .nav-link[data-scroll="#partners"] {
+    grid-column: auto !important;
+    justify-self: stretch;
+    width: 100%;
   }
 
   .section {
@@ -2702,8 +2763,18 @@ textarea {
     line-height: 1.45;
   }
 
+  .topbar-project-title {
+    gap: 4px;
+  }
+
   .topbar-project-line {
-    font-size: 0.88rem;
+    font-size: 1rem;
+    line-height: 1.66;
+  }
+
+  .topbar-project-line:last-child {
+    font-size: 0.98rem;
+    line-height: 1.6;
   }
 
   .hero-text,
