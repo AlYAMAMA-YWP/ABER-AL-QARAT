@@ -1327,6 +1327,13 @@ textarea {
   font-weight: 700;
 }
 
+#components .gallery-strip-title {
+  padding: 8px 14px;
+  border-color: rgba(29, 63, 140, 0.1);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: none;
+}
+
 .equipment-gallery {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1335,6 +1342,21 @@ textarea {
 
 .component-gallery {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+#components .component-gallery {
+  gap: 18px;
+}
+
+#components .component-gallery .stage-card {
+  border-color: rgba(29, 63, 140, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: none;
+}
+
+#components .component-gallery .stage-card img {
+  background: transparent;
 }
 
 .quality-gallery {
