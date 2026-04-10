@@ -2462,9 +2462,9 @@ textarea {
   .topnav .nav-link[data-scroll="#safety"] { order: 9; }
   .topnav .nav-link[data-scroll="#partners"] {
     order: 10;
-    grid-column: 1 / -1;
-    justify-self: center;
-    width: min(100%, 220px);
+    grid-column: 2 / 3;
+    justify-self: stretch;
+    width: 100%;
   }
 
   .section {
