@@ -6,7 +6,9 @@ let sectionObserver;
 
 const pad = (value) => String(value).padStart(3, "0");
 const png = (value) => `assets/media/carved_${pad(value)}.png`;
-const range = (start, end) => Array.from({ length: end - start + 1 }, (_, index) => start + index);
+const asset = (fileName) => `assets/media/${fileName}`;
+const galleryItems = (fileNames, title, caption = "") =>
+  fileNames.map((fileName) => ({ src: asset(fileName), title, caption }));
 const numberFormatter = new Intl.NumberFormat("ar-SA");
 const lazyImageAttrs = 'loading="lazy" decoding="async"';
 const MODAL_MAX_SCALE = 5;
@@ -119,23 +121,23 @@ const componentMetrics = [
     unit: "م",
     label: "أطوال المواسير",
     detail: "مجموعة كبيرة من المواسير بأقطار مختلفة موزعة على شوارع وطرق المنطقة المخدومة بالمشروع.",
-      icon: "assets/media/component-icon-catchpit.png",
-      iconAlt: "أيقونة المواسير"
+    icon: asset("component-icon-catchpit.png"),
+    iconAlt: "أيقونة المواسير"
   },
   {
     value: 495,
     unit: "مصيدة",
     label: "مصائد تجميع المياه",
     detail: "تعمل على تجميع مياه الأمطار وتوزيعها داخل خطوط نقل المياه بالشبكة.",
-      icon: "assets/media/component-icon-pipes.png",
-      iconAlt: "أيقونة مصائد تجميع مياه الأمطار"
+    icon: asset("component-icon-pipes.png"),
+    iconAlt: "أيقونة مصائد تجميع مياه الأمطار"
   },
   {
     value: 154,
     unit: "غرفة",
     label: "غرف التفتيش",
     detail: "تربط الخطوط بعضها البعض وتسهل من عمليات الصيانة المستقبلية.",
-    icon: "assets/media/component-icon-manhole.png",
+    icon: asset("component-icon-manhole.png"),
     iconAlt: "أيقونة غرف التفتيش"
   }
 ];
@@ -161,15 +163,14 @@ const componentItems = [
   }
 ];
 
-const componentGalleryItems = ["component-01.jpeg", "component-02.jpeg", "component-03.jpg"].map((fileName) => ({
-  src: `assets/media/${fileName}`,
-  title: "نماذج من العناصر المكونة للمشروع أثناء التنفيذ",
-  caption: ""
-}));
+const componentGalleryItems = galleryItems(
+  ["component-01.jpeg", "component-02.jpeg", "component-03.jpg"],
+  "نماذج من العناصر المكونة للمشروع أثناء التنفيذ"
+);
 
 const heroMediaItems = [
   {
-    src: "assets/media/hero-map-main.png",
+    src: asset("hero-map-main.png"),
     title: "الخريطة الرئيسية للمشروع",
     caption: "الخريطة الرئيسية للمشروع"
   }
@@ -248,21 +249,23 @@ const stageItems = [
   "stage-image61.jpg",
   "stage-image62.jpeg",
   "stage-image63.jpeg"
-].map((fileName) => ({ src: `assets/media/${fileName}`, title: "صور مراحل العمل بالمشروع", caption: "" }));
+];
+
+const stageGalleryItems = galleryItems(stageItems, "صور مراحل العمل بالمشروع");
 
 const resourceItems = [
-  { value: 192, unit: "فرد", label: "العنصر البشري", detail: "مهندس وعامل وفني ضمن فرق عمل صباحية ومسائية وفرق طوارئ مقسمة على مدار الساعة.", icon: "assets/media/equipment-icon-human.png", iconAlt: "أيقونة العنصر البشري" },
-  { value: 106, unit: "معدة", label: "العنصر التشغيلي", detail: "معدات خفيفة وثقيلة ومعدات حفر وردم ودك تربة ومولدات كهربائية ومضخات سحب مياه وغيرها من المعدات والآليات.", icon: "assets/media/equipment-icon-operational.png", iconAlt: "أيقونة العنصر التشغيلي" }
+  { value: 192, unit: "فرد", label: "العنصر البشري", detail: "مهندس وعامل وفني ضمن فرق عمل صباحية ومسائية وفرق طوارئ مقسمة على مدار الساعة.", icon: asset("equipment-icon-human.png"), iconAlt: "أيقونة العنصر البشري" },
+  { value: 106, unit: "معدة", label: "العنصر التشغيلي", detail: "معدات خفيفة وثقيلة ومعدات حفر وردم ودك تربة ومولدات كهربائية ومضخات سحب مياه وغيرها من المعدات والآليات.", icon: asset("equipment-icon-operational.png"), iconAlt: "أيقونة العنصر التشغيلي" }
 ];
 
 const equipmentItems = [
-  { kicker: "العنصر البشري", title: "الكوادر الفنية المؤهلة", text: "انقسمت عناصر العمل بالمشروع إلى قسمين أولهما العنصر البشري المتمثل في الكوادر الفنية المؤهلة لأعمال التنفيذ والإشراف والمتابعة.", icon: "assets/media/equipment-icon-human.png", iconAlt: "أيقونة الكوادر الفنية المؤهلة" },
-  { kicker: "العنصر التشغيلي", title: "المعدات والأدوات المختلفة", text: "ثانيهما العنصر التشغيلي المتمثل في المعدات (خفيفة - ثقيلة) والأدوات المختلفة اللازمة لإنجاز الأعمال على الوجه الصحيح.", icon: "assets/media/equipment-icon-operational.png", iconAlt: "أيقونة المعدات والأدوات المختلفة" },
+  { kicker: "العنصر البشري", title: "الكوادر الفنية المؤهلة", text: "انقسمت عناصر العمل بالمشروع إلى قسمين أولهما العنصر البشري المتمثل في الكوادر الفنية المؤهلة لأعمال التنفيذ والإشراف والمتابعة.", icon: asset("equipment-icon-human.png"), iconAlt: "أيقونة الكوادر الفنية المؤهلة" },
+  { kicker: "العنصر التشغيلي", title: "المعدات والأدوات المختلفة", text: "ثانيهما العنصر التشغيلي المتمثل في المعدات (خفيفة - ثقيلة) والأدوات المختلفة اللازمة لإنجاز الأعمال على الوجه الصحيح.", icon: asset("equipment-icon-operational.png"), iconAlt: "أيقونة المعدات والأدوات المختلفة" },
   { kicker: "تنظيم العمل", title: "فرق صباحية ومسائية وطوارئ", text: "بدأ العمل بالمشروع بفرق عمل صباحية ومسائية وفرق طوارئ مقسمة على مدار الساعة وموزعة على مواقع العمل المختلفة، بالإضافة لعناصر الإشراف على التنفيذ." },
   { kicker: "تنوع المعدات", title: "معدات خفيفة وثقيلة وآليات مساندة", text: "تنوعت المعدات المستخدمة في المشروع حيث هناك المعدات الخفيفة والثقيلة ومعدات الحفر والردم ودك التربة ومولدات كهربائية ومضخات سحب المياه وغيرها من المعدات والآليات." }
 ];
 
-const equipmentGalleryItems = [
+const equipmentGalleryItems = galleryItems([
   "equipment-01.jpeg",
   "equipment-02.jpg",
   "equipment-03.jpeg",
@@ -275,7 +278,7 @@ const equipmentGalleryItems = [
   "equipment-10.jpg",
   "equipment-11.jpg",
   "equipment-12.jpeg"
-].map((fileName) => ({ src: `assets/media/${fileName}`, title: "نماذج من عناصر العمل بالمشروع", caption: "" }));
+], "نماذج من عناصر العمل بالمشروع");
 
 const qualityLead = {
   kicker: "جودة المشروع",
@@ -314,11 +317,10 @@ const materialProcessItems = [
   { step: "04", title: "حالة الخامة", text: "يتم تحديد حالة الخامة بعد إجراء الاختبارات عليها ليتم بعد ذلك قبولها أو رفضها." }
 ];
 
-const materialGalleryItems = ["material-01.jpg", "material-02.jpg", "material-03.jpg"].map((fileName) => ({
-  src: `assets/media/${fileName}`,
-  title: "نماذج من بعض الخامات والمواد المستخدمة في المشروع",
-  caption: ""
-}));
+const materialGalleryItems = galleryItems(
+  ["material-01.jpg", "material-02.jpg", "material-03.jpg"],
+  "نماذج من بعض الخامات والمواد المستخدمة في المشروع"
+);
 
 const docItems = [
   { src: png(93), title: "نموذج من شهادات ضمان الخامات بالمشروع", caption: "" },
@@ -339,11 +341,10 @@ const environmentItems = [
   { kicker: "الأتربة والضوضاء", title: "تقليل الأتربة والضوضاء", text: "تم العمل في المشروع على الحد من الاتربة والغبار الناتج أثناء عمليات الحفر والردم وكذلك الحد من الضوضاء أثناء التنفيذ واختيار أوقات وطرق تنفيذ تهدف إلى الحد والتقليل من ذلك.", icon: "assets/media/environment-icon-dust.png", iconAlt: "أيقونة الأتربة والضوضاء" }
 ];
 
-const environmentGalleryItems = ["environment-01.jpeg", "environment-02.jpeg"].map((fileName) => ({
-  src: `assets/media/${fileName}`,
-  title: "معايير الجودة البيئية في المشروع",
-  caption: ""
-}));
+const environmentGalleryItems = galleryItems(
+  ["environment-01.jpeg", "environment-02.jpeg"],
+  "معايير الجودة البيئية في المشروع"
+);
 
 const verificationLeadCopy =
   "راعى المشروع منذ بدايته سياسة مراقبة الجودة في جميع مراحل التنفيذ واختبارات التحقق لكل المواد والخامات والأدوات المستخدمة مستعيناً في ذلك بالخبرات الموجودة في فريق الإشراف على التنفيذ وكذلك مكتب إدارة مشاريع برنامج تصريف مياه الأمطار والتي أوكلت لهم مهمة مراقبة الجودة في التنفيذ في مراحل المشروع المختلفة.";
@@ -383,33 +384,20 @@ const safetyCriteriaItems = [
   { title: "الزي الشخصي", icon: "assets/media/safety-uniform.png" }
 ];
 
-const safetyPoints = [
-  { title: "اللوحات الإرشادية", text: "تم استخدام اللوحات الإرشادية على الطرق في المشروع كإحدى وسائل السلامة المرورية لتنبيه قائدي المركبات بالإرشادات والتعليمات المتعلقة بالتحويلات المرورية وأحوال الطرق، وذلك بالتنسيق مع الإدارة العامة لشرطة المرور بمحافظة جدة." },
-  { title: "خطة الأمن والسلامة", text: "تم تنفيذ المشروع وفقاً لخطة أمن وسلامة محكمة في جميع مواقع العمل وعلى مدار الساعة." },
-  { title: "اللقاءات الدورية", text: "تم عقد لقاءات واجتماعات دورية بالعمال ومهندسي المواقع لتوضيح هذه الخطة والوقوف على مدى الالتزام بالمعايير والاشتراطات المطلوبة لتفادي المخاطر والحفاظ على الأرواح والممتلكات." }
-];
-
-const safetyDetailItems = [
-  { kicker: "اللوحات الإرشادية", title: "التنسيق مع الإدارة العامة لشرطة المرور", text: "تم استخدام اللوحات الإرشادية على الطرق في المشروع كإحدى وسائل السلامة المرورية لتنبيه قائدي المركبات بالإرشادات والتعليمات المتعلقة بالتحويلات المرورية وأحوال الطرق، وذلك بالتنسيق مع الإدارة العامة لشرطة المرور بمحافظة جدة." },
-  { kicker: "خطة السلامة", title: "التحويلات المرورية نهاراً وليلاً", text: "تم تنفيذ المشروع وفقاً لخطة أمن وسلامة محكمة في جميع مواقع العمل وعلى مدار الساعة، وتشمل خطة السلامة والتحويلات المرورية نهاراً وليلاً." },
-  { kicker: "اللقاءات الدورية", title: "الالتزام بالاشتراطات المطلوبة", text: "تم عقد لقاءات واجتماعات دورية بالعمال ومهندسي المواقع لتوضيح خطة الأمن والسلامة والوقوف على مدى الالتزام بالمعايير والاشتراطات المطلوبة لتفادي المخاطر والحفاظ على الأرواح والممتلكات." }
-];
-
 const safetyFeatureCards = [
   {
     title: "اللوحات الإرشادية",
     text:
       "تم استخدام اللوحات الإرشادية على الطرق في المشروع كإحدى وسائل السلامة المرورية لتنبيه قائدي المركبات بالإرشادات والتعليمات المتعلقة بالتحويلات المرورية وأحوال الطرق، وذلك بالتنسيق مع الإدارة العامة لشرطة المرور بمحافظة جدة.",
-    images: [
-      "safety-original-image114.jpeg",
-      "safety-original-image113.jpg",
-      "safety-original-image115.jpeg",
-      "safety-original-image112.jpeg"
-    ].map((fileName) => ({
-      src: `assets/media/${fileName}`,
-      title: "اللوحات الإرشادية",
-      caption: ""
-    }))
+    images: galleryItems(
+      [
+        "safety-original-image114.jpeg",
+        "safety-original-image113.jpg",
+        "safety-original-image115.jpeg",
+        "safety-original-image112.jpeg"
+      ],
+      "اللوحات الإرشادية"
+    )
   },
   {
     title: "خطة الأمن والسلامة",
@@ -485,9 +473,7 @@ const verificationExecutionPanel = document.getElementById("verificationExecutio
 const verificationPmoPanel = document.getElementById("verificationPmoPanel");
 const safetyLeadCard = document.getElementById("safetyLeadCard");
 const safetyCriteriaGrid = document.getElementById("safetyCriteriaGrid");
-const safetyPointsContainer = document.getElementById("safetyPoints");
 const safetyGallery = document.getElementById("safetyGallery");
-const safetyDetailGrid = document.getElementById("safetyDetailGrid");
 const partnerStatementCard = document.getElementById("partnerStatement");
 const mediaModal = document.getElementById("mediaModal");
 const modalMedia = document.getElementById("modalMedia");
@@ -943,7 +929,7 @@ function renderMapsSection() {
 
 function renderFieldSection() {
   renderPhases();
-  renderSimpleGallery(stageGrid, stageItems, "مراحل العمل بالمشروع");
+  renderSimpleGallery(stageGrid, stageGalleryItems, "مراحل العمل بالمشروع");
 }
 
 function renderEquipmentSection() {
@@ -1138,23 +1124,6 @@ function warmDeferredSections(index = 0) {
     renderDeferredSection(deferredSectionIds[index]);
     warmDeferredSections(index + 1);
   });
-}
-
-function renderSafetyPoints() {
-  if (!safetyPointsContainer) {
-    return;
-  }
-
-  safetyPointsContainer.innerHTML = safetyPoints
-    .map(
-      (item) => `
-        <article class="safety-point">
-          <strong>${item.title}</strong>
-          <span>${item.text}</span>
-        </article>
-      `
-    )
-    .join("");
 }
 
 function renderWall(container, items, kicker) {
